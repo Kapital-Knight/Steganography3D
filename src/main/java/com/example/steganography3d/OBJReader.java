@@ -9,15 +9,23 @@ public class OBJReader {
     public String getFilePath () { return filePath; }
     private ArrayList<Double> points; // Every 3 doubles are the coordinate of 1 point
     public ArrayList<Double> getPoints () { return points; }
+    private ArrayList<Double> normals; // Every 3 doubles are the coordinate of 1 point
+    public ArrayList<Double> getNormals () { return normals; }
+    private ArrayList<Double> texCoords; // Every 3 doubles are the coordinate of 1 point
+    public ArrayList<Double> getTexCoords () { return texCoords; }
     private Scanner fileScanner;
 
     // Constructors
-    public OBJReader(String filePath) throws Exception {
-        this.filePath = filePath;
-        File file = new File(filePath);
+    public OBJReader(File file) throws Exception {
+        this.filePath = file.getAbsolutePath();
         fileScanner = new Scanner(file);
         points = new ArrayList<Double>();
+        normals = new ArrayList<Double>();
+        texCoords = new ArrayList<Double>();
         extractData();
+    }
+    public OBJReader(String filePath) throws Exception {
+        this(new File(filePath));
     }
 
     // Methods
@@ -33,10 +41,15 @@ public class OBJReader {
                 continue;
 
             String marker = lineScanner.next();
-            System.out.println(marker);
 
             if (marker.equalsIgnoreCase("v")) {
-                extractGeometricVertex(lineScanner);
+                extractDoubles(points, lineScanner);
+            }
+            else if (marker.equalsIgnoreCase("vn")) {
+                extractDoubles(normals, lineScanner);
+            }
+            else if (marker.equalsIgnoreCase("vt")) {
+                extractDoubles(texCoords, lineScanner);
             }
             else if (marker.equals("#")) {
                 continue;
@@ -52,10 +65,9 @@ public class OBJReader {
      * Takes one geometry line of an obj file and add a vertex to points
      * @param lineScanner the "v" is already removed
      */
-    private void extractGeometricVertex(Scanner lineScanner) {
-        System.out.println("Geometric vertex found");
+    private void extractDoubles(ArrayList arrayList, Scanner lineScanner) {
         while (lineScanner.hasNextDouble()) {
-            points.add(lineScanner.nextDouble());
+            arrayList.add(lineScanner.nextDouble());
         }
     }
 }

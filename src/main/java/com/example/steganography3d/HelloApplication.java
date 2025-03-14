@@ -4,22 +4,32 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Scanner;
 
 public class HelloApplication extends Application {
+
+    public static final String folderName = "OBJFiles";
+
     @Override
     public void start(Stage stage) throws IOException, Exception {
         Scene scene = MeshDemo.demoTriangleScene();
 
-        // if filePath isn't correct, try getClass().getResource("cube.obj").toString()
-        String filePath = getClass().getResource("cube.obj").toString();
-        filePath = filePath.replace('\\', '/');
-        OBJReader reader = new OBJReader(filePath);
-        ArrayList<Double> points = reader.getPoints();
+        String fileName = "cube.obj";
+//        String filePath = getClass().getResource("TestFile.txt").toString();
+//        System.out.println(filePath);
 
-        System.out.println(Arrays.toString(points.toArray()));
+        File file = new File(folderName + "/" + fileName);
+        System.out.println(file.getAbsolutePath());
+        System.out.println("Can read file: " + file.canRead());
+        OBJReader reader = new OBJReader(file);
+
+        System.out.println(Arrays.toString(reader.getPoints().toArray()));
+        System.out.println(Arrays.toString(reader.getNormals().toArray()));
+        System.out.println(Arrays.toString(reader.getTexCoords().toArray()));
 
         stage.setTitle("Hello!");
         stage.setScene(scene);
