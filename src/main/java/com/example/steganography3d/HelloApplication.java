@@ -30,7 +30,7 @@ public class HelloApplication extends Application {
         System.out.println(Arrays.toString(reader.getPoints().toArray()));
         System.out.println(Arrays.toString(reader.getNormals().toArray()));
         System.out.println(Arrays.toString(reader.getTexCoords().toArray()));
-
+        
         stage.setTitle("Hello!");
         stage.setScene(scene);
         stage.show();

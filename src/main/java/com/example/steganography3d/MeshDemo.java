@@ -29,7 +29,7 @@ public class MeshDemo {
         triangle.getPoints().addAll(
                 -100f,   100f,    0f,
                 100f,    100f,    0f,
-                -100f,   -100f,   100f
+                -100f,   -200f,   100f
         );
         triangle.getTexCoords().addAll(
                 0f,  1f,
