@@ -1,5 +1,6 @@
 package com.example.steganography3d;
 
+import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.PerspectiveCamera;
 import javafx.scene.Scene;
@@ -8,8 +9,23 @@ import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.MeshView;
 import javafx.scene.shape.TriangleMesh;
 import javafx.scene.shape.VertexFormat;
+import javafx.stage.Stage;
 
-public class MeshDemo {
+public class MeshDemo extends Application {
+
+    @Override
+    public void start(Stage stage) throws Exception {
+        Scene scene = demoTriangleScene();
+
+        stage.setTitle("Hello!");
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    public static void main(String[] args) {
+        launch();
+    }
+
     public static Scene demoTriangleScene () {
         Group group = new Group();
         Scene scene = new Scene(group, 800, 800);

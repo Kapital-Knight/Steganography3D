@@ -6,11 +6,9 @@ import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Scanner;
 
-public class HelloApplication extends Application {
+public class testApplication extends Application {
 
     public static final String folderName = "OBJFiles";
 
@@ -19,8 +17,6 @@ public class HelloApplication extends Application {
         Scene scene = MeshDemo.demoTriangleScene();
 
         String fileName = "cube.obj";
-//        String filePath = getClass().getResource("TestFile.txt").toString();
-//        System.out.println(filePath);
 
         File file = new File(folderName + "/" + fileName);
         System.out.println(file.getAbsolutePath());
@@ -30,6 +26,7 @@ public class HelloApplication extends Application {
         System.out.println(Arrays.toString(reader.getPoints().toArray()));
         System.out.println(Arrays.toString(reader.getNormals().toArray()));
         System.out.println(Arrays.toString(reader.getTexCoords().toArray()));
+        Help.about();
         
         stage.setTitle("Hello!");
         stage.setScene(scene);
