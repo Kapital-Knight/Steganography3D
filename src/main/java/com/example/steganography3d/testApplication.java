@@ -16,15 +16,17 @@ public class testApplication extends Application {
     public void start(Stage stage) throws IOException, Exception {
         Scene scene = MeshDemo.demoTriangleScene();
 
-        String fileName = "cube.obj";
+        String fileName = "Shading Testobj.obj";
 
         File file = new File(folderName + "/" + fileName);
         System.out.println(file.getAbsolutePath());
         System.out.println("Can read file: " + file.canRead());
+        if (!file.canRead()) {
+            return;
+        }
         OBJReader reader = new OBJReader(file);
 
         System.out.println(reader.getMesh());
-        System.out.println(reader.getMesh().pointsToString(7));
 
 //        Help.about();
         

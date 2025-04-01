@@ -53,7 +53,9 @@ public class PolygonalMesh {
     }
 
     public String toString() {
-        String s = getName();
+        String s = "\"" + getName() + "\""
+                + "\nGeometric vertices: "
+                + "\n" + pointsToString(8);
         return s;
     }
 
