@@ -23,14 +23,14 @@ public class testApplication extends Application {
         System.out.println("Can read file: " + file.canRead());
         OBJReader reader = new OBJReader(file);
 
-        System.out.println(Arrays.toString(reader.getPoints().toArray()));
-        System.out.println(Arrays.toString(reader.getNormals().toArray()));
-        System.out.println(Arrays.toString(reader.getTexCoords().toArray()));
-        Help.about();
+        System.out.println(reader.getMesh());
+        System.out.println(reader.getMesh().pointsToString(7));
+
+//        Help.about();
         
-        stage.setTitle("Hello!");
-        stage.setScene(scene);
-        stage.show();
+//        stage.setTitle("Hello!");
+//        stage.setScene(scene);
+//        stage.show();
     }
 
     public static void main(String[] args) {

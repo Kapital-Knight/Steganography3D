@@ -53,10 +53,18 @@ public class PolygonalMesh {
     }
 
     public String toString() {
-        String s = getName() + "\n" + "Geometric vertices:";
+        String s = getName();
+        return s;
+    }
+
+    public String pointsToString () {
+        return pointsToString(0);
+    }
+    public String pointsToString (int maxPoints) {
+        int maxIndex = (maxPoints == 0) ? Integer.MAX_VALUE : maxPoints * 3;
+        String s = "{ ";
         String pointFormat = "[%9.1f %9.1f %9.1f]";
-        for (int i = 0; i < geometricVertices.size(); i+= 3) {
-            s += "\n";
+        for (int i = 0; i < geometricVertices.size() && i < maxIndex; i+= 3) {
             if (i + 2 >= geometricVertices.size()) {
                 s += "{Incomplete vertex}";
                 break;
@@ -64,8 +72,14 @@ public class PolygonalMesh {
             s += String.format(pointFormat,
                     geometricVertices.get(i),
                     geometricVertices.get(i+1),
-                    geometricVertices.get(i+3));
+                    geometricVertices.get(i+2));
         }
+        s = s.replace("][", "]\n  [");
+        int numPointsHidden = (geometricVertices.size() - maxIndex) / 3;
+        if (numPointsHidden > 0) {
+            s += "\n  ... and " + numPointsHidden + " more";
+        }
+        s += " }";
         return s;
     }
 }

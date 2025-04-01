@@ -7,21 +7,15 @@ public class OBJReader {
 
     private String filePath;
     public String getFilePath () { return filePath; }
-    private ArrayList<Double> points; // Every 3 doubles are the coordinate of 1 point
-    public ArrayList<Double> getPoints () { return points; }
-    private ArrayList<Double> normals; // Every 3 doubles are the coordinate of 1 point
-    public ArrayList<Double> getNormals () { return normals; }
-    private ArrayList<Double> texCoords; // Every 3 doubles are the coordinate of 1 point
-    public ArrayList<Double> getTexCoords () { return texCoords; }
+    private PolygonalMesh mesh;
+    public PolygonalMesh getMesh () { return mesh; }
     private Scanner fileScanner;
 
     // Constructors
     public OBJReader(File file) throws Exception {
         this.filePath = file.getAbsolutePath();
         fileScanner = new Scanner(file);
-        points = new ArrayList<Double>();
-        normals = new ArrayList<Double>();
-        texCoords = new ArrayList<Double>();
+        mesh = new PolygonalMesh();
         extractData();
     }
     public OBJReader(String filePath) throws Exception {
@@ -43,16 +37,22 @@ public class OBJReader {
             String marker = lineScanner.next();
 
             if (marker.equalsIgnoreCase("v")) {
-                extractDoubles(points, lineScanner);
+                extractDoubles(mesh.getGeometricVertices(), lineScanner);
             }
-            else if (marker.equalsIgnoreCase("vn")) {
-                extractDoubles(normals, lineScanner);
-            }
+//            else if (marker.equalsIgnoreCase("vn")) {
+//                extractDoubles(normals, lineScanner);
+//            }
             else if (marker.equalsIgnoreCase("vt")) {
-                extractDoubles(texCoords, lineScanner);
+                extractDoubles(mesh.getTextureCoordinates(), lineScanner);
             }
+//            else if (marker.equalsIgnoreCase("f")) {
+//
+//            }
             else if (marker.equals("#")) {
                 continue;
+            }
+            else if (marker.equalsIgnoreCase("o")) {
+                mesh.setName(lineScanner.next());
             }
             else {
 //                throw new Exception("Something went wrong when interpreting OBJ line" + lineNumber);
