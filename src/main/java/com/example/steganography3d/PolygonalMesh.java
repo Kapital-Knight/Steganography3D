@@ -1,5 +1,6 @@
 package com.example.steganography3d;
 
+import javax.swing.*;
 import java.util.ArrayList;
 
 public class PolygonalMesh {
@@ -53,7 +54,8 @@ public class PolygonalMesh {
     }
 
     public String toString() {
-        String s = "\"" + getName() + "\""
+        String s = super.toString()
+                + "\nName: \"" + getName() + "\""
                 + "\nGeometric vertices: "
                 + "\n" + pointsToString(8);
         return s;
@@ -65,7 +67,7 @@ public class PolygonalMesh {
     public String pointsToString (int maxPoints) {
         int maxIndex = (maxPoints == 0) ? Integer.MAX_VALUE : maxPoints * 3;
         String s = "{ ";
-        String pointFormat = "[%9.1f %9.1f %9.1f]";
+        String pointFormat = "[%9f %9f %9f]";
         for (int i = 0; i < geometricVertices.size() && i < maxIndex; i+= 3) {
             if (i + 2 >= geometricVertices.size()) {
                 s += "{Incomplete vertex}";
@@ -83,5 +85,9 @@ public class PolygonalMesh {
         }
         s += " }";
         return s;
+    }
+
+    public void about () {
+        JOptionPane.showMessageDialog(null, toString(), name + " mesh", JOptionPane.INFORMATION_MESSAGE);
     }
 }

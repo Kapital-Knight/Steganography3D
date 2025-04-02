@@ -1,9 +1,11 @@
 package com.example.steganography3d;
 
 import javafx.application.Application;
+import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
@@ -14,9 +16,9 @@ public class testApplication extends Application {
 
     @Override
     public void start(Stage stage) throws IOException, Exception {
-        Scene scene = MeshDemo.demoTriangleScene();
+//        Scene scene = new Scene(new Group(), 800, 800);
 
-        String fileName = "Shading Testobj.obj";
+        String fileName = "cube.obj";
 
         File file = new File(folderName + "/" + fileName);
         System.out.println(file.getAbsolutePath());
@@ -26,11 +28,12 @@ public class testApplication extends Application {
         }
         OBJReader reader = new OBJReader(file);
 
-        System.out.println(reader.getMesh());
+//        System.out.println(reader.getMesh());
 
-//        Help.about();
-        
-//        stage.setTitle("Hello!");
+        Help.about();
+        reader.getMesh().about();
+
+//        stage.setTitle("Steganography 3D");
 //        stage.setScene(scene);
 //        stage.show();
     }
