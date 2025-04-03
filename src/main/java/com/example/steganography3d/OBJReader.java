@@ -26,9 +26,7 @@ public class OBJReader {
     public void extractData () throws Exception {
         Scanner fileScanner = new Scanner(file);
         Scanner lineScanner;
-        int lineNumber = 0;
         while (fileScanner.hasNextLine()) {
-            lineNumber++;
             lineScanner = new Scanner(fileScanner.nextLine());
 
             if (!lineScanner.hasNext())
@@ -39,24 +37,14 @@ public class OBJReader {
             if (marker.equalsIgnoreCase("v")) {
                 extractDoubles(mesh.getGeometricVertices(), lineScanner);
             }
-//            else if (marker.equalsIgnoreCase("vn")) {
-//                extractDoubles(normals, lineScanner);
-//            }
             else if (marker.equalsIgnoreCase("vt")) {
                 extractDoubles(mesh.getTextureCoordinates(), lineScanner);
             }
-//            else if (marker.equalsIgnoreCase("f")) {
-//
-//            }
             else if (marker.equals("#")) {
                 continue;
             }
             else if (marker.equalsIgnoreCase("o")) {
                 mesh.setName(lineScanner.next());
-            }
-            else {
-//                throw new Exception("Something went wrong when interpreting OBJ line" + lineNumber);
-                continue;
             }
         }
     }
