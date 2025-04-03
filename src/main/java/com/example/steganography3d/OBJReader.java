@@ -5,16 +5,15 @@ import java.util.Scanner;
 
 public class OBJReader {
 
-    private String filePath;
-    public String getFilePath () { return filePath; }
+    private File file;
     private PolygonalMesh mesh;
+
+    public File getFile () { return file; }
     public PolygonalMesh getMesh () { return mesh; }
-    private Scanner fileScanner;
 
     // Constructors
-    public OBJReader(File file) throws Exception {
-        this.filePath = file.getAbsolutePath();
-        fileScanner = new Scanner(file);
+    public OBJReader(File objFile) throws Exception {
+        this.file = objFile;
         mesh = new PolygonalMesh();
         extractData();
     }
@@ -25,6 +24,7 @@ public class OBJReader {
     // Methods
 
     public void extractData () throws Exception {
+        Scanner fileScanner = new Scanner(file);
         Scanner lineScanner;
         int lineNumber = 0;
         while (fileScanner.hasNextLine()) {
