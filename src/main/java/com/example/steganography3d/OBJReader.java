@@ -23,7 +23,7 @@ public class OBJReader {
 
     // Methods
 
-    public void extractData () throws Exception {
+    private void extractData () throws Exception {
         Scanner fileScanner = new Scanner(file);
         Scanner lineScanner;
         while (fileScanner.hasNextLine()) {
@@ -35,7 +35,7 @@ public class OBJReader {
             String marker = lineScanner.next();
 
             if (marker.equalsIgnoreCase("v")) {
-                extractDoubles(mesh.getGeometricVertices(), lineScanner);
+                extractDoubles(mesh.getVertices(), lineScanner);
             }
             else if (marker.equalsIgnoreCase("vt")) {
                 extractDoubles(mesh.getTextureCoordinates(), lineScanner);
@@ -53,9 +53,9 @@ public class OBJReader {
      * Takes one geometry line of an obj file and add a vertex to points
      * @param lineScanner the "v" is already removed
      */
-    private void extractDoubles(ArrayList arrayList, Scanner lineScanner) {
+    private void extractDoubles(ArrayList destination, Scanner lineScanner) {
         while (lineScanner.hasNextDouble()) {
-            arrayList.add(lineScanner.nextDouble());
+            destination.add(lineScanner.nextDouble());
         }
     }
 }

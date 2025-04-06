@@ -4,25 +4,25 @@ import javax.swing.*;
 import java.util.ArrayList;
 
 public class PolygonalMesh {
-    private ArrayList<Double> geometricVertices;
+    private ArrayList<Double> vertices;
     private ArrayList<Double> textureCoordinates;
     private ArrayList<Integer> faces;
     private int textureDimensions;
     private String name;
 
     public PolygonalMesh() {
-        geometricVertices = new ArrayList<>();
+        vertices = new ArrayList<>();
         textureCoordinates = new ArrayList<>();
         faces = new ArrayList<>();
         textureDimensions = 2;
         name = "New_object";
     }
 
-    public ArrayList<Double> getGeometricVertices() {
-        return geometricVertices;
+    public ArrayList<Double> getVertices() {
+        return vertices;
     }
-    public void setGeometricVertices(ArrayList<Double> geometricVertices) {
-        this.geometricVertices = geometricVertices;
+    public void setVertices(ArrayList<Double> vertices) {
+        this.vertices = vertices;
     }
 
     public ArrayList<Double> getTextureCoordinates() {
@@ -57,29 +57,29 @@ public class PolygonalMesh {
         String s = super.toString()
                 + "\nName: \"" + getName() + "\""
                 + "\nGeometric vertices: "
-                + "\n" + pointsToString(8);
+                + "\n" + verticesToString(8);
         return s;
     }
 
-    public String pointsToString () {
-        return pointsToString(0);
+    public String verticesToString() {
+        return verticesToString(0);
     }
-    public String pointsToString (int maxPoints) {
+    public String verticesToString(int maxPoints) {
         int maxIndex = (maxPoints == 0) ? Integer.MAX_VALUE : maxPoints * 3;
         String s = "{ ";
         String pointFormat = "[%9f %9f %9f]";
-        for (int i = 0; i < geometricVertices.size() && i < maxIndex; i+= 3) {
-            if (i + 2 >= geometricVertices.size()) {
+        for (int i = 0; i < vertices.size() && i < maxIndex; i+= 3) {
+            if (i + 2 >= vertices.size()) {
                 s += "{Incomplete vertex}";
                 break;
             }
             s += String.format(pointFormat,
-                    geometricVertices.get(i),
-                    geometricVertices.get(i+1),
-                    geometricVertices.get(i+2));
+                    vertices.get(i),
+                    vertices.get(i+1),
+                    vertices.get(i+2));
         }
         s = s.replace("][", "]\n  [");
-        int numPointsHidden = (geometricVertices.size() - maxIndex) / 3;
+        int numPointsHidden = (vertices.size() - maxIndex) / 3;
         if (numPointsHidden > 0) {
             s += "\n  ... and " + numPointsHidden + " more";
         }
