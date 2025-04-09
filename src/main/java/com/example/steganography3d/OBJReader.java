@@ -6,15 +6,15 @@ import java.util.Scanner;
 public class OBJReader {
 
     private File file;
-    private PolygonalMesh mesh;
+    private Object3D object3D;
 
     public File getFile () { return file; }
-    public PolygonalMesh getMesh () { return mesh; }
+    public Object3D getObject3D () { return object3D; }
 
     // Constructors
     public OBJReader(File objFile) throws Exception {
         this.file = objFile;
-        mesh = new PolygonalMesh();
+        object3D = new Object3D();
         extractData();
     }
     public OBJReader(String filePath) throws Exception {
@@ -35,16 +35,16 @@ public class OBJReader {
             String marker = lineScanner.next();
 
             if (marker.equalsIgnoreCase("v")) {
-                extractDoubles(mesh.getVertices(), lineScanner);
+                extractDoubles(object3D.getMesh().getVertices(), lineScanner);
             }
             else if (marker.equalsIgnoreCase("vt")) {
-                extractDoubles(mesh.getTextureCoordinates(), lineScanner);
+                extractDoubles(object3D.getMesh().getTextureCoordinates(), lineScanner);
             }
             else if (marker.equals("#")) {
                 continue;
             }
             else if (marker.equalsIgnoreCase("o")) {
-                mesh.setName(lineScanner.next());
+                object3D.getMesh().setName(lineScanner.next());
             }
         }
     }

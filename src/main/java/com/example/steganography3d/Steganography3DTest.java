@@ -5,10 +5,10 @@ import java.io.FileNotFoundException;
 
 public class Steganography3DTest {
     public static void main(String[] args) throws Exception{
-        String folderName = "OBJFiles";
+
         String fileName = "cube.obj";
 
-        File file = new File(folderName + "/" + fileName);
+        File file = new File(fileName);
         System.out.println(file.getAbsolutePath());
         System.out.println("Can read file: " + file.canRead());
         if (!file.canRead()) {
@@ -18,6 +18,6 @@ public class Steganography3DTest {
         OBJReader reader = new OBJReader(file);
 
         Help.about();
-        reader.getMesh().about();
+        reader.getObject3D().getMesh().about();
     }
 }
