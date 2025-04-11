@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 
 public class Steganography3DTest {
-    public static void main(String[] args) throws Exception{
+    public static void main(String[] args) throws Exception {
 
         String fileName = "cube.obj";
 
