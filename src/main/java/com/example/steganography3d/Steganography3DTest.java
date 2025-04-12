@@ -5,7 +5,11 @@ import java.io.FileNotFoundException;
 
 public class Steganography3DTest {
     public static void main(String[] args) throws Exception {
-        System.out.println("Max value: " + ('~' - ' '));
-        System.out.println(Steganographer.stringToDecimal("Hello there!"));
+        String original = " !\"#$%&'()*+,-./0123456789~";
+        System.out.println(original);
+        String decimcal = Steganographer.stringToDecimal(original);
+        System.out.println(decimcal);
+        String decoded = Steganographer.decimalToString(decimcal);
+        System.out.println(decoded);
     }
 }
