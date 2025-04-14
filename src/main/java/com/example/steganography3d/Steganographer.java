@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 public class Steganographer {
 
-    private static final String LEGAL_CHARACTERS = "\t\r\n !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
+    private static final String LEGAL_CHARACTERS = "\t\r\n\s!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
 
     public static Object3D hideMessageInObject (String message, Object3D coverObject) {
         Object3D stegoObject = new Object3D();
