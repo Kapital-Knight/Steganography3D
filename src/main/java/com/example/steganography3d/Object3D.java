@@ -6,7 +6,7 @@ import java.util.Arrays;
 public class Object3D implements Cloneable {
     private ArrayList<String> lines;
     // regex for any 3-dimensional geometric vertex
-    private final String vertex3DRegex = "v(\\s+-?[0-9]+\\.?[0-9]*){3}";
+    public static final String VERTEX_3D_REGEX = "\\s*v(\\s+-?[0-9]+\\.?[0-9]*){3}\\s*";
 
     public Object3D (ArrayList<String> lines) {
         this.lines = lines;
@@ -15,10 +15,13 @@ public class Object3D implements Cloneable {
     public int numLines() {
         return lines.size();
     }
+    public String getLine (int index) {
+        return lines.get(index);
+    }
 
     public String[] getCoordinates(int lineIndex) {
-        String line = lines.get(lineIndex);
-        if (!line.matches(vertex3DRegex)) {
+        String line = getLine(lineIndex);
+        if (!line.matches(VERTEX_3D_REGEX)) {
             return new String[0];
         }
         String[] tokens = line.split("\\s+");
@@ -48,15 +51,11 @@ public class Object3D implements Cloneable {
         return true;
     }
 
-    public String getLine (int index) {
-        return lines.get(index);
-    }
-
     public String verticesToString() {
         String s = "{";
         for (int i = 0; i < lines.size(); i++) {
             String line = lines.get(i);
-            if (line.matches(vertex3DRegex)) {
+            if (line.matches(VERTEX_3D_REGEX)) {
                 s += "\n " + Arrays.toString(getCoordinates(i));
             }
         }
@@ -65,7 +64,7 @@ public class Object3D implements Cloneable {
 
     public void printLines () {
         for (int i = 0; i < numLines(); i++) {
-            System.out.println(lines.get(i));
+            System.out.println(i + ": " + lines.get(i));
         }
     }
 
