@@ -1,10 +1,11 @@
 package com.example.steganography3d;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 
 public class OBJWriter {
-    private FileWriter fileWriter;
+    private PrintWriter printWriter;
     private String filePath;
 
     public OBJWriter (String filePath) throws IOException {
@@ -17,6 +18,18 @@ public class OBJWriter {
 
     public void setFilePath(String filePath) throws IOException {
         this.filePath = filePath;
-        this.fileWriter = new FileWriter(filePath);
+        this.printWriter = new PrintWriter(filePath);
+    }
+    
+    public boolean writeObject3D (Object3D object3D) {
+        try {
+            for (int i = 0; i < object3D.numLines(); i++) {
+                printWriter.println(object3D.getLine(i));
+            }
+            printWriter.close();
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 }

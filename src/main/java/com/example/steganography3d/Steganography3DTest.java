@@ -15,5 +15,8 @@ public class Steganography3DTest {
 
         Object3D stegoCube = Steganographer.hideMessageInObject(message, cube);
         System.out.println(stegoCube);
+
+        OBJWriter objWriter = new OBJWriter("stegoObject.obj");
+        System.out.println(objWriter.writeObject3D(stegoCube));
     }
 }
