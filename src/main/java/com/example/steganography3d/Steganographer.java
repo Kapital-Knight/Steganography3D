@@ -19,7 +19,7 @@ public class Steganographer {
             String[] oldVertex = stegoObject.getCoordinates(i);
             String[] newVertex = new String[oldVertex.length];
 
-            // If line i is a vertex, create a new vertex
+            // Set each coordinate
             for (int j = 0; j < oldVertex.length; j++) {
                 String oldCoordinate = oldVertex[j];
                 // Replace the last digit of the old vertex with the current digit of the message

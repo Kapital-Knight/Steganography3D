@@ -1,22 +1,23 @@
 package com.example.steganography3d;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Object3D implements Cloneable {
-    private String[] lines;
+    private ArrayList<String> lines;
     // regex for any 3-dimensional geometric vertex
     private final String vertex3DRegex = "v(\\s+-?[0-9]+\\.?[0-9]*){3}";
 
-    public Object3D (String[] lines) {
+    public Object3D (ArrayList<String> lines) {
         this.lines = lines;
     }
 
     public int numLines() {
-        return lines.length;
+        return lines.size();
     }
 
     public String[] getCoordinates(int lineIndex) {
-        String line = lines[lineIndex];
+        String line = lines.get(lineIndex);
         if (!line.matches(vertex3DRegex)) {
             return new String[0];
         }
@@ -33,29 +34,39 @@ public class Object3D implements Cloneable {
 
         String[] coordinates = getCoordinates(lineIndex);
 
-        if (coordinates.length != newCoordinates.length) {
+        if (coordinates.length != newCoordinates.length || coordinates.length == 0) {
             return false;
         }
 
-        String line = lines[lineIndex].toLowerCase();
+        String line = lines.get(lineIndex).toLowerCase();
         String newLine = "v";
         for (int i = 0; i < coordinates.length; i++) {
             newLine += " " + newCoordinates[i];
         }
 
-        lines[lineIndex] = newLine;
+        lines.set(lineIndex, newLine);
         return true;
+    }
+
+    public String getLine (int index) {
+        return lines.get(index);
     }
 
     public String verticesToString() {
         String s = "{";
-        for (int i = 0; i < lines.length; i++) {
-            String line = lines[i];
+        for (int i = 0; i < lines.size(); i++) {
+            String line = lines.get(i);
             if (line.matches(vertex3DRegex)) {
-                s += "\n" + Arrays.toString(getCoordinates(i));
+                s += "\n " + Arrays.toString(getCoordinates(i));
             }
         }
         return s + "\n}";
+    }
+
+    public void printLines () {
+        for (int i = 0; i < numLines(); i++) {
+            System.out.println(lines.get(i));
+        }
     }
 
     @Override
@@ -70,6 +81,6 @@ public class Object3D implements Cloneable {
 
     @Override
     public String toString() {
-        return super.toString() + verticesToString();
+        return super.toString() + " " + verticesToString();
     }
 }

@@ -25,10 +25,10 @@ public class OBJReader {
 
     private void extractData () throws FileNotFoundException {
         Scanner fileScanner = new Scanner(file);
-        String fileContents = "";
+        ArrayList<String> fileContents = new ArrayList<>();
         while (fileScanner.hasNextLine()) {
-            fileContents += fileScanner.nextLine() + '\n';
+            fileContents.add( fileScanner.nextLine() );
         }
-        object3D = new Object3D(fileContents.split("\\v"));
+        object3D = new Object3D(fileContents);
     }
 }
