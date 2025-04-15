@@ -1,12 +1,9 @@
 package com.example.steganography3d;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Scanner;
 
-public class Steganography3DTest {
+public class Steganography3DConsoleApp {
 
     public static void main(String[] args) throws Exception {
         Scanner userInput = new Scanner(System.in);
@@ -29,7 +26,7 @@ public class Steganography3DTest {
         }
     }
 
-    private static void userHideMessage(Scanner userInput) throws Exception {
+    public static void userHideMessage(Scanner userInput) throws Exception {
         System.out.print("Please enter cover object file path (.obj): ");
         String coverFilePath = userInput.nextLine();
         Object3D coverObject = new OBJReader(coverFilePath).getObject3D();
@@ -48,7 +45,7 @@ public class Steganography3DTest {
         System.out.printf("Successfully hid message in \"%s\"\n", stegoFilePath);
     }
 
-    private static void userReadMessage(Scanner userInput) throws Exception {
+    public static void userReadMessage(Scanner userInput) throws Exception {
         System.out.print("Please enter cover object file path (.obj): ");
         String objectFilePath = userInput.nextLine();
         Object3D stegoObject = new OBJReader(objectFilePath).getObject3D();
