@@ -5,6 +5,7 @@ import java.util.Arrays;
 public class Steganographer {
 
     private static final String LEGAL_CHARACTERS = "\t\r\n\s!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
+    private static final int DIGITS_PER_CHARACTER = numberOfDigits(LEGAL_CHARACTERS.length());
 
     public static Object3D hideMessageInObject (String message, Object3D coverObject) {
         Object3D stegoObject = new Object3D();
@@ -44,8 +45,9 @@ public class Steganographer {
     }
 
     /**
-     * @param c a character assumed to be between FIRST_ALLOWED_CHARACTER and LAST_ALLOWED_CHARACTER
-     * @return a two-digit decimal representation of c between 00 and LAST_ALLOWED_CHARACTER_INT
+     * @return the index of c in the String LEGAL_CHARACTERS,
+     * padded with 0's on the left so that every index has the same number of digits.
+     * Throws error if character is not contained in LEGAL_CHARACTERS.
      */
     private static String characterToDecimal (char c) throws Exception {
         int index = LEGAL_CHARACTERS.indexOf(c);
@@ -53,7 +55,8 @@ public class Steganographer {
             throw new Exception("Illegal character");
         }
         else {
-            return (index < 10 ? "0" : "") + index;
+            int numZeros = DIGITS_PER_CHARACTER - numberOfDigits(index);
+            return "0".repeat(numZeros) + index;
         }
     }
 
@@ -66,5 +69,7 @@ public class Steganographer {
         return LEGAL_CHARACTERS.charAt(index);
     }
 
-
+    private static int numberOfDigits(int n) {
+        return ("" + n).length();
+    }
 }
