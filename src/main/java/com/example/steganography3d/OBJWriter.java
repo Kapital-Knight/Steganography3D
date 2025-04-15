@@ -21,15 +21,10 @@ public class OBJWriter {
         this.printWriter = new PrintWriter(filePath);
     }
     
-    public boolean writeObject3D (Object3D object3D) {
-        try {
-            for (int i = 0; i < object3D.numLines(); i++) {
-                printWriter.println(object3D.getLine(i));
-            }
-            printWriter.close();
-            return true;
-        } catch (Exception e) {
-            return false;
+    public void writeObject3D (Object3D object3D) {
+        for (int i = 0; i < object3D.numLines(); i++) {
+            printWriter.println(object3D.getLine(i));
         }
+        printWriter.close();
     }
 }

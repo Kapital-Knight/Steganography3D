@@ -51,11 +51,17 @@ public class Object3D implements Cloneable {
         return true;
     }
 
-    public String verticesToString() {
+    public String verticesToString() {return verticesToString(10);}
+    public String verticesToString(int maxLines) {
         String s = "{";
+        int vertexCount = 0;
         for (int i = 0; i < lines.size(); i++) {
             String line = lines.get(i);
             if (line.matches(VERTEX_3D_REGEX)) {
+                vertexCount++;
+                if (vertexCount > maxLines) {
+                    return s + "...\n}";
+                }
                 s += "\n " + Arrays.toString(getCoordinates(i));
             }
         }
@@ -80,6 +86,6 @@ public class Object3D implements Cloneable {
 
     @Override
     public String toString() {
-        return super.toString() + " " + verticesToString();
+        return super.toString() + " " + verticesToString(3);
     }
 }
