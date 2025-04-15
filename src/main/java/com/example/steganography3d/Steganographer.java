@@ -13,19 +13,23 @@ public class Steganographer {
 
         int decimalIndex = 0;
 
+        // For each line in the stego object
         for (int i = 0; i < stegoObject.numLines(); i++) {
-            String[] oldCoordinates = stegoObject.getCoordinates(i);
-            String[] newCoordinates = new String[oldCoordinates.length];
+            // Get the coordinates of line i
+            String[] oldVertex = stegoObject.getCoordinates(i);
+            String[] newVertex = new String[oldVertex.length];
 
-            for (int j = 0; j < oldCoordinates.length; j++) {
-                String oldCoordinate = oldCoordinates[j];
+            // If line i is a vertex, create a new vertex
+            for (int j = 0; j < oldVertex.length; j++) {
+                String oldCoordinate = oldVertex[j];
+                // Replace the last digit of the old vertex with the current digit of the message
                 char digit = decimalMessage.charAt(decimalIndex % decimalMessage.length());
-                decimalIndex ++;
+                newVertex[j] = oldCoordinate.substring(0, oldCoordinate.length() - 1) + digit;
 
-                newCoordinates[j] = oldCoordinate.substring(0, oldCoordinate.length() - 1) + digit;
+                decimalIndex ++;
             }
 
-            stegoObject.setCoordinates(i, newCoordinates);
+            stegoObject.setCoordinates(i, newVertex);
         }
 
         return stegoObject;
