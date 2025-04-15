@@ -6,11 +6,14 @@ import java.io.IOException;
 
 public class Steganography3DTest {
     public static void main(String[] args) throws Exception {
-        String original = " !\"#$%&'()*+,-./0123456789~";
-        System.out.println(original);
-        String decimal = Steganographer.stringToDecimal(original);
-        System.out.println(decimal);
-        String decoded = Steganographer.decimalToString(decimal);
-        System.out.println(decoded);
+        OBJReader cubeReader = new OBJReader("cube.obj");
+        Object3D cube = cubeReader.getObject3D();
+        System.out.println(cube);
+
+        String message = "Hi!";
+        System.out.println(Steganographer.stringToDecimal(message));
+
+        Object3D stegoCube = Steganographer.hideMessageInObject(message, cube);
+        System.out.println(stegoCube);
     }
 }

@@ -31,7 +31,7 @@ public class testApplication extends Application {
 //        System.out.println(reader.getMesh());
 
         Help.about();
-        reader.getObject3D().getMesh().about();
+//        reader.getObject3D().getMesh().about();
 
 //        stage.setTitle("Steganography 3D");
 //        stage.setScene(scene);

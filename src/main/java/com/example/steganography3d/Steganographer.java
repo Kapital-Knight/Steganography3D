@@ -4,15 +4,34 @@ import java.util.Arrays;
 
 public class Steganographer {
 
-    private static final String LEGAL_CHARACTERS = "\t\r\n\s!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
+    public static final String LEGAL_CHARACTERS = "\t\r\n\s!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
     private static final int DIGITS_PER_CHARACTER = numberOfDigits(LEGAL_CHARACTERS.length());
 
-    public static Object3D hideMessageInObject (String message, Object3D coverObject) {
-        Object3D stegoObject = new Object3D();
+    public static Object3D hideMessageInObject (String message, Object3D coverObject) throws Exception {
+        String decimalMessage = stringToDecimal(message);
+        Object3D stegoObject = (Object3D) coverObject.clone();
+
+        int decimalIndex = 0;
+
+        for (int i = 0; i < stegoObject.numLines(); i++) {
+            String[] oldCoordinates = stegoObject.getCoordinates(i);
+            String[] newCoordinates = new String[oldCoordinates.length];
+
+            for (int j = 0; j < oldCoordinates.length; j++) {
+                String oldCoordinate = oldCoordinates[j];
+                char digit = decimalMessage.charAt(decimalIndex % decimalMessage.length());
+                decimalIndex ++;
+
+                newCoordinates[j] = oldCoordinate.substring(0, oldCoordinate.length() - 1) + digit;
+            }
+
+            stegoObject.setCoordinates(i, newCoordinates);
+        }
+
         return stegoObject;
     }
 
-    public static String readMessageFromMesh (PolygonalMesh stegoMesh) {
+    public static String readMessageFromMesh (Object3D stegoObject) {
         String message = "";
         return message;
     }
