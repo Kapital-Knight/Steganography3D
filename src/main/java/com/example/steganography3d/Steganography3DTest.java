@@ -6,17 +6,20 @@ import java.io.IOException;
 
 public class Steganography3DTest {
     public static void main(String[] args) throws Exception {
-        OBJReader cubeReader = new OBJReader("cube.obj");
+        // User input eventually
+        String filePath = "cube.obj";
+        String message = "Hello world!";
+        String stegoFilePath = "stegoObject.obj";
+
+        // Hide message
+        OBJReader cubeReader = new OBJReader(filePath);
         Object3D cube = cubeReader.getObject3D();
-        System.out.println(cube);
+        OBJWriter objWriter = new OBJWriter(stegoFilePath);
+        boolean success = objWriter.writeObject3D(Steganographer.hideMessageInObject(message, cube));
+        System.out.println("Sucessfully saved: " + success);
 
-        String message = "Hi!";
-        System.out.println(Steganographer.stringToDecimal(message));
-
-        Object3D stegoCube = Steganographer.hideMessageInObject(message, cube);
-        System.out.println(stegoCube);
-
-        OBJWriter objWriter = new OBJWriter("stegoObject.obj");
-        System.out.println(objWriter.writeObject3D(stegoCube));
+        // Read message
+        Object3D stegoCube = new OBJReader(stegoFilePath).getObject3D();
+        System.out.println(Steganographer.readMessageInObject(stegoCube));
     }
 }

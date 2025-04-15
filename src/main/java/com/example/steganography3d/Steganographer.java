@@ -7,6 +7,7 @@ public class Steganographer {
     public static final String LEGAL_CHARACTERS = "\t\r\n\s!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
     private static final int DIGITS_PER_CHARACTER = numberOfDigits(LEGAL_CHARACTERS.length());
 
+
     public static Object3D hideMessageInObject (String message, Object3D coverObject) throws Exception {
         String decimalMessage = stringToDecimal(message);
         Object3D stegoObject = (Object3D) coverObject.clone();
@@ -35,9 +36,32 @@ public class Steganographer {
         return stegoObject;
     }
 
-    public static String readMessageFromMesh (Object3D stegoObject) {
-        String message = "";
-        return message;
+    public static String readMessageInObject (Object3D stegoObject) {
+        String decimalMessage = "";
+        // String together the least significant digit of every vertex
+        for (int i = 0; i < stegoObject.numLines(); i++) {
+            // Length of vertex array will be 0 if the line is not a vertex
+            String[] vertex = stegoObject.getCoordinates(i);
+
+            // Concatenate the least significant digit of each coordinate in the vertex
+            for (String coordinate : vertex) {
+                char leastSignificantDigit = coordinate.charAt(coordinate.length() - 1);
+                decimalMessage += leastSignificantDigit;
+            }
+        }
+
+        // Ensure there is no odd set of digits at the end
+        int extraDigits = decimalMessage.length() % DIGITS_PER_CHARACTER;
+        decimalMessage = decimalMessage.substring(0, decimalMessage.length() - extraDigits);
+
+        // Return the string version of the messsage
+        try {
+            return decimalToString(decimalMessage);
+        }
+        catch (StringIndexOutOfBoundsException e) {
+            return "ERROR: Could not read message from object because it contained undefined characters.";
+        }
+
     }
 
     // Make private later
@@ -53,7 +77,7 @@ public class Steganographer {
     }
 
     // Make private later
-    public static String decimalToString (String decimal) throws Exception {
+    public static String decimalToString (String decimal) {
         String original = "";
 
         for (int i = 1; i < decimal.length(); i += 2) {
