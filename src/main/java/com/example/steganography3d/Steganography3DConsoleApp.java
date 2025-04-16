@@ -1,5 +1,7 @@
 package com.example.steganography3d;
 
+import javax.swing.*;
+import java.awt.*;
 import java.io.PrintWriter;
 import java.util.Scanner;
 
