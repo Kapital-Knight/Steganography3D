@@ -51,6 +51,7 @@ public class Steganography3DPaneApp {
         PrintWriter messageWriter = new PrintWriter(outputFilePath);
 
         messageWriter.write(message);
+        messageWriter.close();
         JOptionPane.showMessageDialog(null, "Successfully saved message to " + outputFilePath);
     }
 

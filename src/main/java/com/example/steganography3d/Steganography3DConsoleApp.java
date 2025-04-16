@@ -57,6 +57,7 @@ public class Steganography3DConsoleApp {
         PrintWriter messageWriter = new PrintWriter(outputFilePath);
 
         messageWriter.write(message);
+        messageWriter.close();
         System.out.println("Successfully saved message to " + outputFilePath);
     }
 
