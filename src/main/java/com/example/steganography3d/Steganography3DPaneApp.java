@@ -45,7 +45,7 @@ public class Steganography3DPaneApp {
         String objectFilePath = promptSingleLine("Please enter cover object file path (.obj): ");
         Object3D stegoObject = new OBJReader(objectFilePath).getObject3D();
         String message = Steganographer.readMessageInObject(stegoObject);
-        final int MAX_LENGTH = 1000;
+        final int MAX_LENGTH = 200;
         String messagePreview = (message.length() > MAX_LENGTH) ? message.substring(0, MAX_LENGTH - 3) + "..." : message;
         JOptionPane.showMessageDialog(null, String.format("Message: \"%s\"\n", messagePreview));
 

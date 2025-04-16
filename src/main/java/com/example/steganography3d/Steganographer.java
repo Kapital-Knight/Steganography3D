@@ -1,15 +1,15 @@
 package com.example.steganography3d;
 
-import java.util.Arrays;
-
 public class Steganographer {
 
     public static final String LEGAL_CHARACTERS = "\t\r\n\s!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
+    // How many decimal characters are used to describe each original message character
     private static final int DIGITS_PER_CHARACTER = numberOfDigits(LEGAL_CHARACTERS.length());
-
+    // 1 + the last legal character index indicates the end of a message
+    private static final String END_DECIMAL_MESSAGE = "" + LEGAL_CHARACTERS.length();
 
     public static Object3D hideMessageInObject (String message, Object3D coverObject) throws Exception {
-        String decimalMessage = stringToDecimal(message);
+        String decimalMessage = stringToDecimal(message) + END_DECIMAL_MESSAGE;
         Object3D stegoObject = (Object3D) coverObject.clone();
 
         int decimalIndex = 0;
@@ -80,8 +80,12 @@ public class Steganographer {
     public static String decimalToString (String decimal) {
         String original = "";
 
-        for (int i = 1; i < decimal.length(); i += 2) {
-            String decimalCharacter = decimal.substring(i-1, i+1);
+        for (int i = DIGITS_PER_CHARACTER-1; i < decimal.length(); i += DIGITS_PER_CHARACTER) {
+            String decimalCharacter = decimal.substring(i+1-DIGITS_PER_CHARACTER, i+1);
+
+            if (decimalCharacter.equals(END_DECIMAL_MESSAGE)) {
+                return original;
+            }
 
             char character = decimalToCharacter(decimalCharacter);
 
