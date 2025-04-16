@@ -26,15 +26,15 @@ public class Steganography3DPaneApp {
     }
 
     public static void userHideMessage() throws Exception {
-        String coverFilePath = JOptionPane.showInputDialog("Please enter cover object file path (.obj): ");
+        String coverFilePath = promptSingleLine("Please enter cover object file path (.obj): ");
         Object3D coverObject = new OBJReader(coverFilePath).getObject3D();
         JOptionPane.showMessageDialog(null, "Cover object preview: " + coverObject.verticesToString(3));
 
-        String message = JOptionPane.showInputDialog("Please enter message you want to hide in object.");
+        String message = promptMultipleLines("Please enter message you want to hide in object.");
         Object3D stegoObject = Steganographer.hideMessageInObject(message, coverObject);
         JOptionPane.showMessageDialog(null, "Stego object preview: " + stegoObject.verticesToString(3));
 
-        String stegoFilePath = JOptionPane.showInputDialog("Please enter output file path (.obj): ");
+        String stegoFilePath = promptSingleLine("Please enter output file path (.obj): ");
         OBJWriter objWriter = new OBJWriter(stegoFilePath);
         objWriter.writeObject3D(stegoObject);
 
@@ -42,12 +42,14 @@ public class Steganography3DPaneApp {
     }
 
     public static void userReadMessage() throws Exception {
-        String objectFilePath = JOptionPane.showInputDialog("Please enter cover object file path (.obj): ");
+        String objectFilePath = promptSingleLine("Please enter cover object file path (.obj): ");
         Object3D stegoObject = new OBJReader(objectFilePath).getObject3D();
         String message = Steganographer.readMessageInObject(stegoObject);
-        JOptionPane.showMessageDialog(null, String.format("Message: \"%s\"\n", message));
+        final int MAX_LENGTH = 1000;
+        String messagePreview = (message.length() > MAX_LENGTH) ? message.substring(0, MAX_LENGTH - 3) + "..." : message;
+        JOptionPane.showMessageDialog(null, String.format("Message: \"%s\"\n", messagePreview));
 
-        String outputFilePath = JOptionPane.showInputDialog("Please enter output file path (.txt): ");
+        String outputFilePath = promptSingleLine("Please enter output file path (.txt): ");
         PrintWriter messageWriter = new PrintWriter(outputFilePath);
 
         messageWriter.write(message);
@@ -55,7 +57,22 @@ public class Steganography3DPaneApp {
         JOptionPane.showMessageDialog(null, "Successfully saved message to " + outputFilePath);
     }
 
+    private static String promptSingleLine(String prompt) {
+        return JOptionPane.showInputDialog(prompt);
+    }
+
     private static int promptOptions(String prompt, String[] options) {
         return JOptionPane.showOptionDialog(null, prompt, "Input", JOptionPane.OK_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+    }
+
+    private static String promptMultipleLines(String prompt) {
+        JTextArea textArea = new JTextArea(20, 100);
+        JScrollPane scrollPane = new JScrollPane(textArea);
+
+        int option = JOptionPane.showConfirmDialog(null, scrollPane, prompt, JOptionPane.OK_CANCEL_OPTION);
+        if (option == JOptionPane.OK_OPTION) {
+            return textArea.getText();
+        }
+        throw new RuntimeException("Programmer error from multi line input");
     }
 }
