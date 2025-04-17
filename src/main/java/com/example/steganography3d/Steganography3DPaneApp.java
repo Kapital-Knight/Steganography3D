@@ -42,7 +42,7 @@ public class Steganography3DPaneApp {
     }
 
     public static void userReadMessage() throws Exception {
-        String objectFilePath = promptSingleLine("Please enter cover object file path (.obj): ");
+        String objectFilePath = promptSingleLine("Please enter stego object file path (.obj): ");
         Object3D stegoObject = new OBJReader(objectFilePath).getObject3D();
         String message = Steganographer.readMessageInObject(stegoObject);
         final int MAX_LENGTH = 200;
