@@ -47,7 +47,7 @@ public class Steganography3DPaneApp {
         String message = Steganographer.readMessageInObject(stegoObject);
         final int MAX_LENGTH = 200;
         String messagePreview = (message.length() > MAX_LENGTH) ? message.substring(0, MAX_LENGTH - 3) + "..." : message;
-        JOptionPane.showMessageDialog(null, String.format("Message: \"%s\"\n", messagePreview));
+        JOptionPane.showMessageDialog(null, String.format("Message: \n\"%s\"\n", messagePreview));
 
         String outputFilePath = promptSingleLine("Please enter output file path (.txt): ");
         PrintWriter messageWriter = new PrintWriter(outputFilePath);
