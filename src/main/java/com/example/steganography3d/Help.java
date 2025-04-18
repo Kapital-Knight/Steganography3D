@@ -3,6 +3,7 @@ package com.example.steganography3d;
 import javax.swing.*;
 
 public class Help {
+    // Describes the purpose of this app -- Steganography3D -- using a graphical message
     public static void about() {
         JOptionPane.showMessageDialog(null, """
                 Steganography 3D allows the user to discretely encode a messages in 3D objects.

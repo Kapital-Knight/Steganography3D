@@ -13,6 +13,10 @@ public class OBJReader {
     public Object3D getObject3D () { return object3D; }
 
     // Constructors
+
+    /**
+     * @param objFile Should be .obj format
+     */
     public OBJReader(File objFile) throws Exception {
         this.file = objFile;
         extractData();
@@ -23,6 +27,7 @@ public class OBJReader {
 
     // Methods
 
+    // Stores .obj data from file into object3D so it doesn't have to be processed everytime getObject3D is called
     private void extractData () throws FileNotFoundException {
         Scanner fileScanner = new Scanner(file);
         ArrayList<String> fileContents = new ArrayList<>();

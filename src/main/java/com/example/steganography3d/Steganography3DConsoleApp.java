@@ -48,7 +48,7 @@ public class Steganography3DConsoleApp {
     }
 
     public static void userReadMessage(Scanner userInput) throws Exception {
-        System.out.print("Please enter cover object file path (.obj): ");
+        System.out.print("Please enter stego object file path (.obj): ");
         String objectFilePath = userInput.nextLine();
         Object3D stegoObject = new OBJReader(objectFilePath).getObject3D();
         String message = Steganographer.readMessageInObject(stegoObject);
