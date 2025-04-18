@@ -1,3 +1,9 @@
+/**
+ @author Matthew Allgaier
+ @since 4/17/2025
+ Steganographer.java
+ This class can either hide a String message in an object3D using least significant digit encoding, or read such a message.
+ */
 package com.example.steganography3d;
 
 public class Steganographer {

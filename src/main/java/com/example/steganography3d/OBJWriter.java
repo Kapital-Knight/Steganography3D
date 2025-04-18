@@ -1,3 +1,10 @@
+/**
+ @author Matthew Allgaier
+ @since 4/17/2025
+ OBJWriter.java
+ Used to write Object3D objects to a .obj file
+ */
+
 package com.example.steganography3d;
 import java.io.FileWriter;
 import java.io.IOException;

@@ -1,3 +1,10 @@
+/**
+ @author Matthew Allgaier
+ @since 4/17/2025
+ Steganography3DPaneApp.java
+ Provides a GUI to user Steganography 3D and the Steganographer class.
+ */
+
 package com.example.steganography3d;
 
 import javax.swing.*;
