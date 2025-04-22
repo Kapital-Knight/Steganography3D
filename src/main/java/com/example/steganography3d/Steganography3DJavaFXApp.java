@@ -22,7 +22,6 @@ import java.io.File;
 import java.io.IOException;
 
 public class Steganography3DJavaFXApp extends Application {
-    final private static String DEFAULT_FILE_PATH_MESSAGE_FORMAT = "Select %s";
 
     static private StringProperty s_coverFilePath;
     static private StringProperty s_stegoFilePath;
@@ -35,11 +34,11 @@ public class Steganography3DJavaFXApp extends Application {
         stage.setTitle("Steganography 3D");
         stage.setScene(scene);
 
-        Label coverLabel = fileFieldLabel("Cover Object", stage);
-        s_coverFilePath = coverLabel.textProperty();
+        FileSelectionField coverSelectionField = new FileSelectionField("Cover Object", stage);
+        s_coverFilePath = coverSelectionField.pathProperty();
 
-        Label stegoLabel = fileFieldLabel("Stego Object", stage);
-        s_stegoFilePath = stegoLabel.textProperty();
+        FileSelectionField stegoSelectionField = new FileSelectionField("Stego Object", stage);
+        s_stegoFilePath = stegoSelectionField.pathProperty();
 
         stage.show();
     }
@@ -47,42 +46,4 @@ public class Steganography3DJavaFXApp extends Application {
     public static void main(String[] args) {
         launch();
     }
-
-    /**
-     * @param stage Assumes the scene is not null and that the scene root is of type Pane
-     * @return Label and button for selecting an object file
-     */
-    private static Label fileFieldLabel(String title, Stage stage) {
-        Button button = new Button("Choose File");
-
-        Label label = new Label(String.format(DEFAULT_FILE_PATH_MESSAGE_FORMAT, title), button);
-        label.setContentDisplay(ContentDisplay.LEFT);
-
-        // Add label to the stage, assuming its scene root is a Pane
-        ((Pane)stage.getScene().getRoot()).getChildren().add(label);
-
-
-        FileChooser fileChooser = objectFileChooser(title);
-
-        button.setOnAction( event -> {
-            File file = fileChooser.showOpenDialog(stage);
-            try {
-                label.textProperty().setValue(file.getAbsolutePath());
-                fileChooser.setInitialDirectory(file.getParentFile());
-                System.out.println(file.getName());
-            } catch (NullPointerException exception) {}
-        });
-
-        return label;
-    }
-
-    private static FileChooser objectFileChooser(String title) {
-        // https://docs.oracle.com/javafx/2/ui_controls/file-chooser.htm#CCHJAJBH
-        FileChooser objectFileChooser = new FileChooser();
-        objectFileChooser.setTitle(title);
-        objectFileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
-        objectFileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("3D Objects (Wavefront)", "*.obj"));
-        return objectFileChooser;
-    }
-
 }
