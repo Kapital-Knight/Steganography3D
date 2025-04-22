@@ -24,11 +24,11 @@ public class OBJReader {
     /**
      * @param objFile Should be .obj format
      */
-    public OBJReader(File objFile) throws Exception {
+    public OBJReader(File objFile) throws FileNotFoundException {
         this.file = objFile;
         extractData();
     }
-    public OBJReader(String filePath) throws Exception {
+    public OBJReader(String filePath) throws FileNotFoundException {
         this(new File(filePath));
     }
 
