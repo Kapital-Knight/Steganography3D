@@ -22,6 +22,7 @@ import java.io.File;
 import java.io.IOException;
 
 public class Steganography3DJavaFXApp extends Application {
+    final private static String DEFAULT_FILE_PATH_MESSAGE_FORMAT = "Select %s";
 
     static private StringProperty s_coverFilePath;
     static private StringProperty s_stegoFilePath;
@@ -43,12 +44,6 @@ public class Steganography3DJavaFXApp extends Application {
         stage.show();
     }
 
-    private static void userSelectObject3D(String title, Stage stage, StringProperty outputStringProperty) {
-        FileChooser coverFileChooser = objectFileChooser(title);
-        File coverFile = coverFileChooser.showOpenDialog(stage);
-        outputStringProperty.setValue(coverFile.getAbsolutePath());
-    }
-
     public static void main(String[] args) {
         launch();
     }
@@ -60,13 +55,23 @@ public class Steganography3DJavaFXApp extends Application {
     private static Label fileFieldLabel(String title, Stage stage) {
         Button button = new Button("Choose File");
 
-        Label label = new Label("Select " + title.toLowerCase(), button);
+        Label label = new Label(String.format(DEFAULT_FILE_PATH_MESSAGE_FORMAT, title), button);
         label.setContentDisplay(ContentDisplay.LEFT);
 
         // Add label to the stage, assuming its scene root is a Pane
         ((Pane)stage.getScene().getRoot()).getChildren().add(label);
 
-        button.setOnAction( e -> userSelectObject3D(title, stage, label.textProperty()));
+
+        FileChooser fileChooser = objectFileChooser(title);
+
+        button.setOnAction( event -> {
+            File file = fileChooser.showOpenDialog(stage);
+            try {
+                label.textProperty().setValue(file.getAbsolutePath());
+                fileChooser.setInitialDirectory(file.getParentFile());
+                System.out.println(file.getName());
+            } catch (NullPointerException exception) {}
+        });
 
         return label;
     }
