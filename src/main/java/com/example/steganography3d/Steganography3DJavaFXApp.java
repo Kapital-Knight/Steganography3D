@@ -14,6 +14,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
@@ -57,17 +58,19 @@ public class Steganography3DJavaFXApp extends Application {
         Scene scene = new Scene(mainPane, screenSize.width*0.5, screenSize.height*0.5);
 
 
-        Pane filePane = new VBox(10);
-        filePane.backgroundProperty().setValue(new Background(new BackgroundFill(Color.BISQUE, CornerRadii.EMPTY, Insets.EMPTY)));
-        mainPane.getChildren().add(filePane);
+        Pane inputPane = new VBox(10);
+        inputPane.backgroundProperty().setValue(new Background(new BackgroundFill(Color.BISQUE, CornerRadii.EMPTY, Insets.EMPTY)));
+        mainPane.getChildren().add(inputPane);
 
-        FileSelectionField coverSelectionField = new FileSelectionField("Cover Object", stage, filePane, FileSelectionField.FileType.OBJ);
+        FileSelectionField coverSelectionField = new FileSelectionField("Cover Object", stage, inputPane, FileSelectionField.FileType.OBJ);
         s_coverFilePath = coverSelectionField.pathProperty();
 
-        FileSelectionField messageSelectionField = new FileSelectionField("Message", stage, filePane, FileSelectionField.FileType.TXT);
-        s_stegoFilePath = messageSelectionField.pathProperty();
+        TextField messageField = new TextField();
+        Label messageLabel = new Label("Message: ", messageField);
+        messageLabel.setContentDisplay(ContentDisplay.RIGHT);
+        inputPane.getChildren().add(messageLabel);
 
-        FileSelectionField stegoSelectionField = new FileSelectionField("Stego Object", stage, filePane, FileSelectionField.FileType.OBJ);
+        FileSelectionField stegoSelectionField = new FileSelectionField("Stego Object", stage, inputPane, FileSelectionField.FileType.OBJ);
         s_stegoFilePath = stegoSelectionField.pathProperty();
 
         return scene;
