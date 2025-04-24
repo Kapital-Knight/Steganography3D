@@ -21,7 +21,7 @@ public class Steganographer {
      * @return A stego object nearly identical to coverObject,
      * except the least significant vertex digits contain message as a decimal.
      */
-    public static Object3D hideMessageInObject (String message, Object3D coverObject) throws Exception {
+    public static Object3D hideMessageInObject (String message, Object3D coverObject) throws IllegalArgumentException {
         // Covert to decimal then add END_DECIMAL_MESSAGE to indicate when the message ends and repeats
         String decimalMessage = stringToDecimal(message) + END_DECIMAL_MESSAGE;
         Object3D stegoObject = (Object3D) coverObject.clone();
@@ -88,7 +88,7 @@ public class Steganographer {
      * See characterToDecimal for more info.
      * @param original A string containing only characters found in LEGAL_CHARACTERS
      */
-    private static String stringToDecimal (String original) throws Exception {
+    private static String stringToDecimal (String original) throws IllegalArgumentException {
         String decimal = "";
 
         // Add two digits to decimal for every character in original
@@ -130,11 +130,11 @@ public class Steganographer {
      * padded with 0's on the left so that every index has the same number of digits.
      * Throws error if character is not contained in LEGAL_CHARACTERS.
      */
-    private static String characterToDecimal (char c) throws Exception {
+    private static String characterToDecimal (char c) throws IllegalArgumentException {
         int index = LEGAL_CHARACTERS.indexOf(c);
         // Throw an exception if the character is not contained in LEGAL_CHARACTERS
         if (index < 0) {
-            throw new Exception("Illegal character");
+            throw new IllegalArgumentException("Illegal character");
         }
         else {
             // pad with '0's so that the string has length DIGITS_PER_CHARACTER (e.g. 3 -> 03)

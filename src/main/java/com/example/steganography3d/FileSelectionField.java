@@ -27,7 +27,7 @@ public class FileSelectionField {
      * @param stage Assumes the scene is not null and that the scene root is of type Pane
      * @return Label and button for selecting an object file
      */
-     public FileSelectionField(String title, Stage stage, Pane pane, FileType fileType) {
+     public FileSelectionField(String title, Stage stage, Pane pane, FileType fileType, boolean allowNewFiles) {
         chooseButton = new Button("Choose File");
         this.fileType = fileType;
 
@@ -41,7 +41,13 @@ public class FileSelectionField {
         FileChooser fileChooser = objectFileChooser(title);
 
         chooseButton.setOnAction( event -> {
-            File file = fileChooser.showOpenDialog(stage);
+            File file;
+            if (allowNewFiles) {
+                file = fileChooser.showSaveDialog(stage);
+            }
+            else {
+                file = fileChooser.showOpenDialog(stage);
+            }
             try {
                 pathLabel.textProperty().setValue(file.getAbsolutePath());
                 fileChooser.setInitialDirectory(file.getParentFile());

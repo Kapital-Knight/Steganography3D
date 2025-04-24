@@ -7,9 +7,9 @@
 package com.example.steganography3d;
 
 import javafx.application.Application;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.geometry.Insets;
-import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ContentDisplay;
@@ -17,21 +17,21 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
-import javafx.scene.shape.Circle;
-import javafx.stage.FileChooser;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import java.awt.*;
-import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Stack;
 
 public class Steganography3DJavaFXApp extends Application {
 
-    static private StringProperty s_coverFilePath;
-    static private StringProperty s_stegoFilePath;
-    static private StringProperty s_textFilePath;
+    static private StringProperty s_coverFilePath = new SimpleStringProperty();
+    static private StringProperty s_stegoFilePath = new SimpleStringProperty();
+    static private StringProperty s_textFilePath = new SimpleStringProperty();
+    static private StringProperty s_message = new SimpleStringProperty();
+
 
     @Override
     public void start(Stage stage) throws IOException {
@@ -62,17 +62,58 @@ public class Steganography3DJavaFXApp extends Application {
         inputPane.backgroundProperty().setValue(new Background(new BackgroundFill(Color.BISQUE, CornerRadii.EMPTY, Insets.EMPTY)));
         mainPane.getChildren().add(inputPane);
 
-        FileSelectionField coverSelectionField = new FileSelectionField("Cover Object", stage, inputPane, FileSelectionField.FileType.OBJ);
-        s_coverFilePath = coverSelectionField.pathProperty();
+        FileSelectionField coverSelectionField = new FileSelectionField("Cover Object", stage, inputPane, FileSelectionField.FileType.OBJ, false);
+        s_coverFilePath.bind(coverSelectionField.pathProperty());
 
         TextField messageField = new TextField();
         Label messageLabel = new Label("Message: ", messageField);
         messageLabel.setContentDisplay(ContentDisplay.RIGHT);
         inputPane.getChildren().add(messageLabel);
+        s_message.bind(messageField.textProperty());
 
-        FileSelectionField stegoSelectionField = new FileSelectionField("Stego Object", stage, inputPane, FileSelectionField.FileType.OBJ);
-        s_stegoFilePath = stegoSelectionField.pathProperty();
+        FileSelectionField stegoSelectionField = new FileSelectionField("Stego Object", stage, inputPane, FileSelectionField.FileType.OBJ, true);
+        s_stegoFilePath.bind(stegoSelectionField.pathProperty());
+
+        Button confirmButton = new Button("Hide message");
+        confirmButton.setOnAction(actionEvent -> {
+            try {
+                if (s_message.getValue().isEmpty()) {
+                    throw new IllegalArgumentException("Type a message to hide.");
+                }
+                Object3D coverObject = new OBJReader(s_coverFilePath.getValue()).getObject3D();
+                Object3D stegoObject = Steganographer.hideMessageInObject(s_message.getValue(), coverObject);
+                OBJWriter objWriter = new OBJWriter(s_stegoFilePath.getValue());
+                objWriter.writeObject3D(stegoObject);
+                showNotification("Successfully saved to " + objWriter.getFilePath());
+            }
+            catch (FileNotFoundException exception) {
+                showNotification(exception.getMessage(), "File not found");
+            }
+            catch (IllegalArgumentException exception) {
+                showNotification(exception.getMessage(), "Illegal argument");
+            }
+            catch (IOException exception) {
+                showNotification(exception.getMessage(), "IO exception");
+            }
+        });
+        inputPane.getChildren().add(confirmButton);
 
         return scene;
+    }
+
+    private static void showNotification(String message, String subtitle) {
+        Pane mainPane = new StackPane();
+        Text notificationText = new Text(message);
+        mainPane.getChildren().add(notificationText);
+
+        Scene notificationScene = new Scene(mainPane);
+
+        Stage notificationStage = new Stage(StageStyle.UTILITY);
+        notificationStage.setTitle("Steganography 3D | " + subtitle);
+        notificationStage.setScene(notificationScene);
+        notificationStage.show();
+    }
+    private  static void showNotification(String message) {
+        showNotification(message, "Notification");
     }
 }

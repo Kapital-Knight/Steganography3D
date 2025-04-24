@@ -9,6 +9,8 @@ package com.example.steganography3d;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.file.FileSystem;
+import java.nio.file.FileSystems;
 import java.util.ArrayList;
 
 public class OBJWriter {
@@ -26,6 +28,9 @@ public class OBJWriter {
 
     // sets both filePath and printWriter based on filePath
     public void setFilePath(String filePath) throws IOException {
+        if (!filePath.contains(FileSystems.getDefault().getSeparator())) {
+            throw new IOException("Choose an absoulte for path to write to");
+        }
         this.filePath = filePath;
         this.printWriter = new PrintWriter(filePath);
     }
