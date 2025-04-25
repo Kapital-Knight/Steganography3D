@@ -7,23 +7,22 @@
 package com.example.steganography3d;
 
 public class Steganographer {
-
-    // Characters that can be hidden in a stego object
-    public static final String LEGAL_CHARACTERS = "\t\r\n\s!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
+    
     // How many decimal characters are used to describe each original message character
-    private static final int DIGITS_PER_CHARACTER = numberOfDigits(LEGAL_CHARACTERS.length());
-    // 1 + the last legal character index indicates the end of a message
-    private static final String END_DECIMAL_MESSAGE = "" + LEGAL_CHARACTERS.length();
+    private static final int DIGITS_PER_CHARACTER = 5;
+    // A character (undefined in Unicode) which Steganographer uses to mark the end of a message
+    private static final String END_MESSAGE = characterToDecimal('\uFFF0', '\u0000');
+
 
     /**
-     * @param message Must contain only characters contained in LEGAL_CHARACTERS to work properly.
      * @param coverObject If there are not enough vertices in coverObject, the full message may not be hidden.
      * @return A stego object nearly identical to coverObject,
      * except the least significant vertex digits contain message as a decimal.
      */
-    public static Object3D hideMessageInObject (String message, Object3D coverObject) throws IllegalArgumentException {
+    public static Object3D hideMessageInObject (String message, Object3D coverObject, String key) throws IllegalArgumentException {
         // Covert to decimal then add END_DECIMAL_MESSAGE to indicate when the message ends and repeats
-        String decimalMessage = stringToDecimal(message) + END_DECIMAL_MESSAGE;
+        String decimalMessage = stringToDecimal(message, key);
+        decimalMessage += END_MESSAGE;
         Object3D stegoObject = (Object3D) coverObject.clone();
 
         int decimalIndex = 0;
@@ -55,7 +54,7 @@ public class Steganographer {
      * Reads the least significant digits in stegoObject to decode a message already hidden using Steganographer
      * @param stegoObject An object that already has a message encoded in it using hideMessageInObject
      */
-    public static String readMessageInObject (Object3D stegoObject) {
+    public static String readMessageInObject (Object3D stegoObject, String key) {
         String decimalMessage = "";
         // String together the least significant digit of every vertex
         for (int i = 0; i < stegoObject.numLines(); i++) {
@@ -75,7 +74,7 @@ public class Steganographer {
 
         // Return the string version of the messsage
         try {
-            return decimalToString(decimalMessage);
+            return decimalToString(decimalMessage, key);
         }
         catch (StringIndexOutOfBoundsException e) {
             return "ERROR: Could not read message from object because it contained undefined characters.";
@@ -86,39 +85,39 @@ public class Steganographer {
     /**
      * Converts a string of legal characters into a longer string of only decimal characters.
      * See characterToDecimal for more info.
-     * @param original A string containing only characters found in LEGAL_CHARACTERS
      */
-    private static String stringToDecimal (String original) throws IllegalArgumentException {
+    private static String stringToDecimal (String original, String key) {
         String decimal = "";
 
-        // Add two digits to decimal for every character in original
+        // Add DIGITS_PER_CHARACTER digits to decimal string for every character in original
         for (int i = 0; i < original.length(); i++) {
-            decimal += characterToDecimal(original.charAt(i));
+            decimal += characterToDecimal(original.charAt(i), key.charAt(i % key.length()));
         }
 
         return decimal;
     }
 
     /**
-     * Converts a string of decimal characters into a string of characters from LEGAL_CHARACTERS.
+     * Converts a string of decimal characters into a string of characters
      * @param decimal If one of the numbers in decimal is the END_DECIMAL_MESSAGE,
      *                then only the portion of the message before that is returned .
      */
-    private static String decimalToString (String decimal) {
+    private static String decimalToString (String decimal, String key) {
         String original = "";
 
         // Loop across each DIGITS_PER_CHARACTER-long substring of decimal
         for (int i = DIGITS_PER_CHARACTER-1; i < decimal.length(); i += DIGITS_PER_CHARACTER) {
-            // The decimal number representing the index of a character in LEGAL_CHARACTERS
+            // The decimal number with length DIGITS_PER_CHARACTER
             String decimalCharacter = decimal.substring(i+1-DIGITS_PER_CHARACTER, i+1);
 
             // Return only previous parts of message if END_DECIMAL_MESSAGE is found
-            if (decimalCharacter.equals(END_DECIMAL_MESSAGE)) {
+            if (decimalCharacter.equals(END_MESSAGE)) {
                 return original;
             }
 
             // Add character to message
-            char character = decimalToCharacter(decimalCharacter);
+            char keyCharacter = key.charAt((i / DIGITS_PER_CHARACTER) % key.length());
+            char character = decimalToCharacter(decimalCharacter, keyCharacter);
             original += character;
         }
 
@@ -130,34 +129,36 @@ public class Steganographer {
      * padded with 0's on the left so that every index has the same number of digits.
      * Throws error if character is not contained in LEGAL_CHARACTERS.
      */
-    private static String characterToDecimal (char c) throws IllegalArgumentException {
-        int index = LEGAL_CHARACTERS.indexOf(c);
-        // Throw an exception if the character is not contained in LEGAL_CHARACTERS
-        if (index < 0) {
-            throw new IllegalArgumentException("Illegal character");
+    private static String characterToDecimal (char c, char key) {
+        // Apply key to c using XOR
+        int transformedC = key ^ c;
+        
+        String decimal = "";
+        // Add each component of three bits to decimal, leaving out the first bit on the left
+        for (int i = DIGITS_PER_CHARACTER-1; i >= 0; i--) {
+            // Select only 3 bits at a time, starting with the leftmost three bits
+            int component = (transformedC >> 3*i) & 0b111;
+            decimal += component;
         }
-        else {
-            // pad with '0's so that the string has length DIGITS_PER_CHARACTER (e.g. 3 -> 03)
-            int numZeros = DIGITS_PER_CHARACTER - numberOfDigits(index);
-            return "0".repeat(numZeros) + index;
-        }
+        return decimal;
     }
 
     /**
-     * @param decimal a two-digit number assumed to be between 00 and LAST_ALLOWED_CHARACTER_INT
+     * @param decimal a five-digit number, with each digit being between 0 and 7
      * @return the corresponding character between FIRST_ALLOWED_CHARACTER and LAST_ALLOWED_CHARACTER
      */
-    private static Character decimalToCharacter (String decimal) {
-        int index = Integer.parseInt(decimal);
-        return LEGAL_CHARACTERS.charAt(index);
-    }
+    private static Character decimalToCharacter (String decimal, char key) {
+        int character = 0b0;
 
-    /**
-     * @param n
-     * @return Minimum number of digits needed to write a number in decimal (e.g. 987 has 3 digits)
-     */
-    private static int numberOfDigits(int n) {
-        // Convert n to a String, then return the length of the String
-        return ("" + n).length();
+        for (int i = 0; i < DIGITS_PER_CHARACTER; i++) {
+            // Convert character to int value it represents
+            int value = decimal.charAt(i) & 0b1111;
+            // Shift left to appropriate position
+            int component = value << 3 * (4-i);
+
+            character += component;
+        }
+
+        return (char)(character ^ key);
     }
 }

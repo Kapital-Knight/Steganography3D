@@ -36,7 +36,11 @@ public class Steganography3DConsoleApp {
 
         System.out.println("Please enter message you want to hide in object.");
         String message = userInput.nextLine();
-        Object3D stegoObject = Steganographer.hideMessageInObject(message, coverObject);
+
+        System.out.println("Please enter key.");
+        String key = userInput.nextLine();
+
+        Object3D stegoObject = Steganographer.hideMessageInObject(message, coverObject, key);
         System.out.println("Stego object preview: " + stegoObject.verticesToString(3));
 
         System.out.print("Please enter output file path (.obj): ");
@@ -51,7 +55,11 @@ public class Steganography3DConsoleApp {
         System.out.print("Please enter stego object file path (.obj): ");
         String objectFilePath = userInput.nextLine();
         Object3D stegoObject = new OBJReader(objectFilePath).getObject3D();
-        String message = Steganographer.readMessageInObject(stegoObject);
+
+        System.out.println("Please enter key.");
+        String key = userInput.nextLine();
+
+        String message = Steganographer.readMessageInObject(stegoObject, key);
         System.out.printf("Message: \"%s\"\n", message);
 
         System.out.print("Please enter output file path (.txt): ");
