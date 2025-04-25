@@ -1,3 +1,11 @@
+/**
+ @author Matthew Allgaier
+ @since 4/24/2025
+ FileSelectionField.java
+ An object allows user to select a file of type .obj or .txt and displays their selection.
+ Used in Steganography3DPaneApp.java
+ */
+
 package com.example.steganography3d;
 
 import javafx.beans.binding.DoubleBinding;
