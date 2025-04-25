@@ -25,6 +25,7 @@ import javafx.stage.StageStyle;
 import java.awt.*;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Stack;
 
 public class Steganography3DJavaFXApp extends Application {
 
@@ -48,6 +49,20 @@ public class Steganography3DJavaFXApp extends Application {
 
     private static Scene taskSelectionScene() {
         Scene scene = new Scene(new Pane());
+
+        return scene;
+    }
+
+    private static Scene menuScene (Stage stage) {
+        VBox mainPane = new VBox();
+        Scene scene = new Scene(mainPane);
+
+        Button readButton = new Button("Read message");
+        readButton.setOnAction(actionEvent -> {
+
+        });
+
+        Button hideButton = new Button("Hide message");
 
         return scene;
     }
