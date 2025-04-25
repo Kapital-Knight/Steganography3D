@@ -20,6 +20,8 @@ public class Steganographer {
      * except the least significant vertex digits contain message as a decimal.
      */
     public static Object3D hideMessageInObject (String message, Object3D coverObject, String key) throws IllegalArgumentException {
+        // Make sure key has at least one character
+        key = key.isEmpty() ? "\0000" : key;
         // Covert to decimal then add END_DECIMAL_MESSAGE to indicate when the message ends and repeats
         String decimalMessage = stringToDecimal(message, key);
         decimalMessage += END_MESSAGE;
@@ -55,6 +57,8 @@ public class Steganographer {
      * @param stegoObject An object that already has a message encoded in it using hideMessageInObject
      */
     public static String readMessageInObject (Object3D stegoObject, String key) {
+        // Make sure key has at least one character
+        key = key.isEmpty() ? "\0000" : key;
         String decimalMessage = "";
         // String together the least significant digit of every vertex
         for (int i = 0; i < stegoObject.numLines(); i++) {
