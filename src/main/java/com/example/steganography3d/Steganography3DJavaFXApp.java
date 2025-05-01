@@ -74,7 +74,7 @@ public class Steganography3DJavaFXApp extends Application {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         Pane mainPane = new StackPane();
         mainPane.setBackground(s_defaultBackground);
-        s_readMessageScene = new Scene(mainPane, screenSize.width*0.3, screenSize.height*0.3);
+        s_readMessageScene = new Scene(mainPane);
 
         // Pane for all input fields
         Pane vBox = new VBox(s_vBoxBuffer);
@@ -91,7 +91,7 @@ public class Steganography3DJavaFXApp extends Application {
         keyField.maxWidthProperty().bind(s_readMessageScene.widthProperty().subtract(20));
         keyField.setPrefRowCount(3);
         Label keyLabel = new Label("Key: ", keyField);
-        keyLabel.setContentDisplay(ContentDisplay.RIGHT);
+        keyLabel.setContentDisplay(ContentDisplay.BOTTOM);
         vBox.getChildren().add(keyLabel);
 
 
@@ -144,7 +144,7 @@ public class Steganography3DJavaFXApp extends Application {
         TextArea messageField = new TextArea();
         messageField.maxWidthProperty().bind(s_hideMessageScene.widthProperty().subtract(30));
         Label messageLabel = new Label("Message: ", messageField);
-        messageLabel.setContentDisplay(ContentDisplay.RIGHT);
+        messageLabel.setContentDisplay(ContentDisplay.BOTTOM);
         inputPane.getChildren().add(messageLabel);
 
         // Key field
@@ -152,11 +152,11 @@ public class Steganography3DJavaFXApp extends Application {
         keyField.maxWidthProperty().bind(s_hideMessageScene.widthProperty().subtract(30));
         keyField.setPrefRowCount(3);
         Label keyLabel = new Label("Key: ", keyField);
-        keyLabel.setContentDisplay(ContentDisplay.RIGHT);
+        keyLabel.setContentDisplay(ContentDisplay.BOTTOM);
         inputPane.getChildren().add(keyLabel);
 
         // Stego object field
-        FileSelectionField stegoSelectionField = new FileSelectionField("Stego Object", stage, inputPane, FileSelectionField.FileType.OBJ, true);
+        FileSelectionField stegoSelectionField = new FileSelectionField("Stego Object (output)", stage, inputPane, FileSelectionField.FileType.OBJ, true);
 
         // Confirm button to hide message
         Button confirmButton = new Button("Hide message");
