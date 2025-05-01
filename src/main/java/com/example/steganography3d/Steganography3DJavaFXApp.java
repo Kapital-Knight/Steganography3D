@@ -11,10 +11,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ContentDisplay;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
@@ -80,28 +77,26 @@ public class Steganography3DJavaFXApp extends Application {
         s_readMessageScene = new Scene(mainPane, screenSize.width*0.3, screenSize.height*0.3);
 
         // Pane for all input fields
-        Pane inputPane = new VBox(s_vBoxBuffer);
-        mainPane.getChildren().add(inputPane);
+        Pane vBox = new VBox(s_vBoxBuffer);
+        mainPane.getChildren().add(vBox);
 
         // Add a back button
-        inputPane.getChildren().add(backButton(stage));
+        vBox.getChildren().add(backButton(stage));
 
         // Stego object field
-        FileSelectionField stegoSelectionField = new FileSelectionField("Stego Object", stage, inputPane, FileSelectionField.FileType.OBJ, false);
+        FileSelectionField stegoSelectionField = new FileSelectionField("Stego Object", stage, vBox, FileSelectionField.FileType.OBJ, false);
 
         // Key field
-        TextField keyField = new TextField();
+        TextArea keyField = new TextArea();
+        keyField.maxWidthProperty().bind(s_readMessageScene.widthProperty().subtract(20));
+        keyField.setPrefRowCount(3);
         Label keyLabel = new Label("Key: ", keyField);
         keyLabel.setContentDisplay(ContentDisplay.RIGHT);
-        inputPane.getChildren().add(keyLabel);
+        vBox.getChildren().add(keyLabel);
 
-        // Message output
-        Text messageText = new Text();
-        Label messageLabel = new Label("Message:", messageText);
-        messageLabel.setContentDisplay(ContentDisplay.BOTTOM);
-        mainPane.getChildren().add(messageLabel);
 
         // Confirm button to read message
+        Text messageText = new Text();
         Button confirmButton = new Button("Read message");
         confirmButton.setOnAction(actionEvent -> {
             try {
@@ -115,8 +110,16 @@ public class Steganography3DJavaFXApp extends Application {
                 showNotification(exception.getMessage(), "Illegal argument");
             }
         });
-        inputPane.getChildren().add(confirmButton);
+        vBox.getChildren().add(confirmButton);
 
+        // Message output
+        ScrollPane messageScrollPane = new ScrollPane(messageText);
+        messageScrollPane.maxHeightProperty().bind(s_readMessageScene.heightProperty().subtract(200));
+        messageScrollPane.maxWidthProperty().bind(s_readMessageScene.widthProperty().subtract(10));
+        messageScrollPane.prefWidthProperty().bind(s_readMessageScene.widthProperty().subtract(10));
+        Label messageLabel = new Label("Message:", messageScrollPane);
+        messageLabel.setContentDisplay(ContentDisplay.BOTTOM);
+        vBox.getChildren().add(messageLabel);
     }
 
     private static void initializeHideMessageScene(Stage stage) {
@@ -124,7 +127,7 @@ public class Steganography3DJavaFXApp extends Application {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         Pane mainPane = new StackPane();
         mainPane.setBackground(s_defaultBackground);
-        s_hideMessageScene = new Scene(mainPane, screenSize.width*0.3, screenSize.height*0.3);
+        s_hideMessageScene = new Scene(mainPane);
 
         // Pane for all input fields
         Pane inputPane = new VBox(s_vBoxBuffer);
@@ -138,13 +141,16 @@ public class Steganography3DJavaFXApp extends Application {
 
 
         // Message field
-        TextField messageField = new TextField();
+        TextArea messageField = new TextArea();
+        messageField.maxWidthProperty().bind(s_hideMessageScene.widthProperty().subtract(30));
         Label messageLabel = new Label("Message: ", messageField);
         messageLabel.setContentDisplay(ContentDisplay.RIGHT);
         inputPane.getChildren().add(messageLabel);
 
         // Key field
-        TextField keyField = new TextField();
+        TextArea keyField = new TextArea();
+        keyField.maxWidthProperty().bind(s_hideMessageScene.widthProperty().subtract(30));
+        keyField.setPrefRowCount(3);
         Label keyLabel = new Label("Key: ", keyField);
         keyLabel.setContentDisplay(ContentDisplay.RIGHT);
         inputPane.getChildren().add(keyLabel);
