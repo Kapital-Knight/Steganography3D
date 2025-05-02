@@ -24,10 +24,12 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public class Steganography3DJavaFXApp extends Application {
-
+    // Background of app
     private static Background s_defaultBackground = new Background(new BackgroundFill(Color.BISQUE, CornerRadii.EMPTY, Insets.EMPTY));
+    // Distance between GUI elements
     private static double s_vBoxBuffer = 10.0;
 
+    // Three different scenes the user can navigate between
     private static Scene s_menuScene;
     private static Scene s_hideMessageScene;
     private static Scene s_readMessageScene;
