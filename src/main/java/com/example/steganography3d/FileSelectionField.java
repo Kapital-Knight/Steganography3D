@@ -48,8 +48,10 @@ public class FileSelectionField {
 
         FileChooser fileChooser = objectFileChooser(title);
 
+        // When button is clicked
         chooseButton.setOnAction( event -> {
             File file;
+            // Let user choose file
             if (allowNewFiles) {
                 file = fileChooser.showSaveDialog(stage);
             }
@@ -67,6 +69,7 @@ public class FileSelectionField {
     public StringProperty pathProperty () { return pathLabel.textProperty(); }
     public DoubleBinding widthBinding () {return pathLabel.prefWidthProperty().add(chooseButton.maxWidthProperty()); }
 
+    // Returns a labeled objectFileChooser, with the path as the label
     private FileChooser objectFileChooser(String title) {
         // https://docs.oracle.com/javafx/2/ui_controls/file-chooser.htm#CCHJAJBH
         FileChooser objectFileChooser = new FileChooser();
