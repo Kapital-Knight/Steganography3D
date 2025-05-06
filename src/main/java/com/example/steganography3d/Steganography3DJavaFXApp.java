@@ -50,40 +50,38 @@ public class Steganography3DJavaFXApp extends Application {
         launch();
     }
 
+    // creates navigation menu and stores it in s_menuScene
     private static void initializeMenuScene(Stage stage) {
-        // Make scene half of screen
+        // Screen size used to make scene a reasonable portion of the screen
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-
         VBox mainPane = new VBox(s_vBoxBuffer);
         s_menuScene = new Scene(mainPane, screenSize.width*0.3, screenSize.height*0.3);
         mainPane.setBackground(s_defaultBackground);
 
-        Button helpButton = new Button("Help");
-        helpButton.setOnAction(actionEvent -> {
-            showNotification(Help.about(), "Help");
-        });
-
+        // Navigation button to hide a message
         Button hideButton = new Button("Hide message");
         hideButton.setOnAction(actionEvent -> {
             stage.setScene(s_hideMessageScene);
         });
 
+        // Navigation button to Read a message
         Button readButton = new Button("Read message");
         readButton.setOnAction(actionEvent -> {
             stage.setScene(s_readMessageScene);
         });
 
-        mainPane.getChildren().addAll(helpButton, hideButton, readButton);
+        // Add all nodes to mainPane
+        mainPane.getChildren().addAll(hideButton, readButton);
     }
 
+    // read menu and stores it in s_readMessageScene
     private static void initializeReadMessageScene(Stage stage) {
-        // Make scene half of screen
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        // A pane to contain other panes in case more are added later
         Pane mainPane = new StackPane();
         mainPane.setBackground(s_defaultBackground);
         s_readMessageScene = new Scene(mainPane);
 
-        // Pane for all input fields
+        // Pane for all input and output fields
         Pane vBox = new VBox(s_vBoxBuffer);
         mainPane.getChildren().add(vBox);
 
@@ -129,6 +127,7 @@ public class Steganography3DJavaFXApp extends Application {
         vBox.getChildren().add(messageLabel);
     }
 
+    // creates hiding menu and stores it in s_hideMessageScene
     private static void initializeHideMessageScene(Stage stage) {
         // Make scene half of screen
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -168,6 +167,7 @@ public class Steganography3DJavaFXApp extends Application {
         // Confirm button to hide message
         Button confirmButton = new Button("Hide message");
         confirmButton.setOnAction(actionEvent -> {
+            // Try loading cover object, hiding message in it, and saving the resulting stego object
             try {
                 if (messageField.textProperty().getValue().isEmpty()) {
                     throw new IllegalArgumentException("Type a message to hide.");
@@ -191,6 +191,7 @@ public class Steganography3DJavaFXApp extends Application {
         inputPane.getChildren().add(confirmButton);
     }
 
+    // Shows temporary window to notify the user of error or successful operation
     private static void showNotification(String message, String subtitle) {
         Pane mainPane = new StackPane();
         Text notificationText = new Text(message);
@@ -207,7 +208,7 @@ public class Steganography3DJavaFXApp extends Application {
         showNotification(message, "Notification");
     }
 
-    // Button that takes user back to menu scene
+    // Returns a button that takes user back to menu scene
     private static Button backButton(Stage stage) {
         // Button that takes user back to menu scene
         Button button = new Button("Back");
