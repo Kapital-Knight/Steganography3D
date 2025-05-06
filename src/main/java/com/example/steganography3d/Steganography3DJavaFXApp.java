@@ -175,6 +175,7 @@ public class Steganography3DJavaFXApp extends Application {
                 if (messageField.textProperty().getValue().isEmpty()) {
                     throw new IllegalArgumentException("Type a message to hide.");
                 }
+
                 Object3D coverObject = new OBJReader(coverSelectionField.pathProperty().getValue()).getObject3D();
                 Object3D stegoObject = Steganographer.hideMessageInObject(messageField.textProperty().getValue(), coverObject, keyField.getText());
                 OBJWriter objWriter = new OBJWriter(stegoSelectionField.pathProperty().getValue());

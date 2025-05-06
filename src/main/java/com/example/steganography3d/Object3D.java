@@ -28,6 +28,20 @@ public class Object3D implements Cloneable {
         return lines.get(index);
     }
 
+
+    public int numVertices() {
+        int vertexCount = 0;
+        // For each line in this object3D
+        for (int i = 0; i < lines.size(); i++) {
+            String line = lines.get(i);
+            // If currect line is a vertex
+            if (line.matches(VERTEX_3D_REGEX)) {
+                vertexCount++;
+            }
+        }
+        return vertexCount;
+    }
+
     /**
      * @param lineIndex index of which line you want coordinate information from. May or may not be a vertex.
      * @return Array of only the numeric substrings of a 3D vertex.

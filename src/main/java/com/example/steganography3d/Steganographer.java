@@ -20,6 +20,10 @@ public class Steganographer {
      * except the least significant vertex digits contain message as a decimal.
      */
     public static Object3D hideMessageInObject (String message, Object3D coverObject, String key) throws IllegalArgumentException {
+        if (message.length() >= characterCapacity(coverObject)) {
+            throw new IllegalArgumentException("Cover object only has capacity for " + characterCapacity(coverObject) + " characters, but message contained " + message.length() + " characters.");
+        }
+
         // Make sure key has at least one character
         key = key.isEmpty() ? "\0000" : key;
         // Covert to decimal then add END_DECIMAL_MESSAGE to indicate when the message ends and repeats
@@ -84,6 +88,13 @@ public class Steganographer {
             return "ERROR: Could not read message from object because it contained undefined characters.";
         }
 
+    }
+
+    /**
+     * @return Number of characters that can be hidden in the cover object using hideMessageInObject
+     */
+    public static int characterCapacity (Object3D coverObject) {
+        return coverObject.numVertices() * 3 / DIGITS_PER_CHARACTER - 1;
     }
 
     /**

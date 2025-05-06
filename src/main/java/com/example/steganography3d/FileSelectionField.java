@@ -11,6 +11,8 @@ package com.example.steganography3d;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.StringProperty;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
@@ -61,7 +63,6 @@ public class FileSelectionField {
             try {
                 pathLabel.textProperty().setValue(file.getAbsolutePath());
                 fileChooser.setInitialDirectory(file.getParentFile());
-                System.out.println(file.getName());
             } catch (NullPointerException exception) {}
         });
      }
