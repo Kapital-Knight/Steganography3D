@@ -58,6 +58,11 @@ public class Steganography3DJavaFXApp extends Application {
         s_menuScene = new Scene(mainPane, screenSize.width*0.3, screenSize.height*0.3);
         mainPane.setBackground(s_defaultBackground);
 
+        Button helpButton = new Button("Help");
+        helpButton.setOnAction(actionEvent -> {
+            showNotification(Help.about(), "Help");
+        });
+
         Button hideButton = new Button("Hide message");
         hideButton.setOnAction(actionEvent -> {
             stage.setScene(s_hideMessageScene);
@@ -68,7 +73,7 @@ public class Steganography3DJavaFXApp extends Application {
             stage.setScene(s_readMessageScene);
         });
 
-        mainPane.getChildren().addAll(hideButton, readButton);
+        mainPane.getChildren().addAll(helpButton, hideButton, readButton);
     }
 
     private static void initializeReadMessageScene(Stage stage) {
