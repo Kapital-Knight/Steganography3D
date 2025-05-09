@@ -20,7 +20,7 @@ public class Steganographer {
      * except the least significant vertex digits contain message as a decimal.
      */
     public static Object3D hideMessageInObject (String message, Object3D coverObject, String key) throws IllegalArgumentException {
-        if (message.length() >= characterCapacity(coverObject)) {
+        if (message.length() > characterCapacity(coverObject)) {
             throw new IllegalArgumentException("Cover object only has capacity for " + characterCapacity(coverObject) + " characters, but message contained " + message.length() + " characters.");
         }
 
