@@ -18,6 +18,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
+import javax.swing.*;
 import java.awt.Toolkit;
 import java.awt.Dimension;
 import java.io.FileNotFoundException;
@@ -60,7 +61,7 @@ public class Steganography3DJavaFXApp extends Application {
 
         Button helpButton = new Button("Help");
         helpButton.setOnAction(actionEvent -> {
-            showNotification(Help.about(), "Help");
+            showNotification(Help.about(), "Help", false);
         });
 
         Button hideButton = new Button("Hide message");
@@ -112,10 +113,10 @@ public class Steganography3DJavaFXApp extends Application {
                 messageText.setText(Steganographer.readMessageInObject(stegoObject, keyField.getText()));
             }
             catch (FileNotFoundException exception) {
-                showNotification(exception.getMessage(), "File not found");
+                showNotification(exception.getMessage(), "File not found", true);
             }
             catch (IllegalArgumentException exception) {
-                showNotification(exception.getMessage(), "Illegal argument");
+                showNotification(exception.getMessage(), "Illegal argument", true);
             }
         });
         vBox.getChildren().add(confirmButton);
@@ -183,21 +184,28 @@ public class Steganography3DJavaFXApp extends Application {
                 showNotification("Successfully saved to " + objWriter.getFilePath());
             }
             catch (FileNotFoundException exception) {
-                showNotification(exception.getMessage(), "File not found");
+                showNotification(exception.getMessage(), "File not found", true);
             }
             catch (IllegalArgumentException exception) {
-                showNotification(exception.getMessage(), "Illegal argument");
+                showNotification(exception.getMessage(), "Illegal argument", true);
             }
             catch (IOException exception) {
-                showNotification(exception.getMessage(), "IO exception");
+                showNotification(exception.getMessage(), "IO exception", true);
             }
         });
         inputPane.getChildren().add(confirmButton);
     }
 
     // Shows temporary window to notify the user of error or successful operation
-    private static void showNotification(String message, String subtitle) {
-        Pane mainPane = new StackPane();
+    private static void showNotification(String message, String subtitle, boolean isError) {
+        Pane mainPane = new VBox();
+
+        if (isError) {
+            Text errorText = new Text("ERROR");
+            errorText.setStroke(Color.DARKRED);
+            mainPane.getChildren().add(errorText);
+        }
+
         Text notificationText = new Text(message);
         mainPane.getChildren().add(notificationText);
 
@@ -209,7 +217,7 @@ public class Steganography3DJavaFXApp extends Application {
         notificationStage.show();
     }
     private  static void showNotification(String message) {
-        showNotification(message, "Notification");
+        showNotification(message, "Notification", false);
     }
 
     // Returns a button that takes user back to menu scene
