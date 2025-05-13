@@ -8,6 +8,9 @@
 
 package com.example.steganography3d;
 
+import javafx.scene.shape.TriangleMesh;
+import javafx.scene.shape.VertexFormat;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -16,6 +19,9 @@ public class Object3D implements Cloneable {
     private ArrayList<String> lines;
     // regex for any 3-dimensional geometric vertex
     public static final String VERTEX_3D_REGEX = "\\s*v(\\s+-?[0-9]+\\.?[0-9]*){3}\\s*";
+    public static final String TEXTURE_2D_REGEX = "\\s*vt(\\s+-?[0-9]+\\.?[0-9]*){3}\\s*";
+    public static final String NORMAL_3D_REGEX = "\\s*vt(\\s+-?[0-9]+\\.?[0-9]*){3}\\s*";
+    public static final String FACE_REGEX = "\\s*f(\\s+[0-9]+\\/[0-9]?\\/[0-9]+){3,}\\s*";
 
     public Object3D (ArrayList<String> lines) {
         this.lines = lines;
@@ -48,18 +54,13 @@ public class Object3D implements Cloneable {
      * (e.g. "v 1233 -234 13.5" becomes ["1233", "-234", "13.5"])
      * Returns empty array if specified line is not a 3D vertex
      */
-    public String[] getCoordinates(int lineIndex) {
+    public String[] getCoordinates(int lineIndex, String regex) {
         String line = getLine(lineIndex);
-        //Returns empty array if specified line is not a 3D vertex
-        if (!line.matches(VERTEX_3D_REGEX)) {
+        //Returns empty array if specified line is not the correct type of coordinates
+        if (!line.matches(regex)) {
             return new String[0];
         }
-        // Split line by whitespace ("v 1233 -234 13.5" becomes ["v", "1233", "-234", "13.5"])
-        String[] tokens = line.split("\\s+"); // example: ["v", "1233", "-234", "13.5"]
-        // The coordinates array contains only the numbers. example: ["1233", "-234", "13.5"]
-        String[] coordinates = new String[tokens.length - 1];
-        System.arraycopy(tokens, 1, coordinates, 0, coordinates.length);
-        return coordinates;
+        return stringToCoordinates(line);
     }
 
     /*
@@ -73,7 +74,7 @@ public class Object3D implements Cloneable {
             return false;
         }
 
-        String[] coordinates = getCoordinates(lineIndex);
+        String[] coordinates = getCoordinates(lineIndex, VERTEX_3D_REGEX);
 
         if (coordinates.length != newCoordinates.length || coordinates.length == 0) {
             return false;
@@ -110,7 +111,7 @@ public class Object3D implements Cloneable {
                     return s + "...\n}";
                 }
                 // otherwise, add the coordinates of this vertex to s
-                s += "\n " + Arrays.toString(getCoordinates(i));
+                s += "\n " + Arrays.toString(getCoordinates(i, VERTEX_3D_REGEX));
             }
         }
         return s + "\n}";
@@ -122,7 +123,38 @@ public class Object3D implements Cloneable {
             System.out.println(i + ": " + lines.get(i));
         }
     }
+    
+    public TriangleMesh toTriangleMesh () {
+        TriangleMesh mesh = new TriangleMesh(VertexFormat.POINT_NORMAL_TEXCOORD);
 
+        for (String line : lines) {
+            if (line.matches(VERTEX_3D_REGEX)) {
+                String[] coordinates = stringToCoordinates(line);
+                for (String coordinate : coordinates) {
+                    mesh.getPoints().addAll(Float.parseFloat(coordinate));
+                }
+            }
+            else if (line.matches(TEXTURE_2D_REGEX)) {
+                String[] coordinates = stringToCoordinates(line);
+                for (String coordinate : coordinates) {
+                    mesh.getTexCoords().addAll(Float.parseFloat(coordinate));
+                }
+
+            }
+            else if (line.matches(NORMAL_3D_REGEX)) {
+                String[] coordinates = stringToCoordinates(line);
+                for (String coordinate : coordinates) {
+                    mesh.getNormals().addAll(Float.parseFloat(coordinate));
+                }
+            } else if (line.matches(FACE_REGEX)) {
+                mesh.getFaces().addAll(stringToFaces(line));
+            }
+        }
+
+
+        for
+    }
+    
     @Override
     public Object clone() {
         try {
@@ -136,5 +168,45 @@ public class Object3D implements Cloneable {
     @Override
     public String toString() {
         return super.toString() + " " + verticesToString(3);
+    }
+
+
+
+    private static String[] stringToCoordinates(String line) {
+        // Split line by whitespace ("v 1233 -234 13.5" becomes ["v", "1233", "-234", "13.5"])
+        String[] tokens = line.split("\\s+"); // example: ["v", "1233", "-234", "13.5"]
+        // The coordinates array contains only the numbers. example: ["1233", "-234", "13.5"]
+        String[] coordinates = new String[tokens.length - 1];
+        System.arraycopy(tokens, 1, coordinates, 0, coordinates.length);
+        return coordinates;
+    }
+
+    private static int[] stringToFaces(String line) {
+
+        // OBJ files v/t/n
+        // Javafx is v/n/t
+
+        String[] tokens = line.trim().split("\\s+");
+
+        String[] points = new String[tokens.length - 1];
+        System.arraycopy(tokens, 1, points, 0, points.length);
+
+        int[] vertexIndices = new int[points.length];
+        int[] textureIndices = new int[points.length];
+        int[] normalIndices = new int[points.length];
+
+        for (int i = 0; i < points.length; i++) {
+            String[] indices = points[i].split("/");
+            vertexIndices[i] = Integer.parseInt(indices[0]);
+            textureIndices[i] = Integer.parseInt(indices[1]);
+            normalIndices[i] = Integer.parseInt(indices[2]);
+        }
+
+        int numTriangles = points.length - 2;
+        int[] faces = new int[numTriangles * 9];
+        for (int i = 0; i < numTriangles; i++) {
+            // Add a single triangle using three indices from each
+
+        }
     }
 }

@@ -36,7 +36,7 @@ public class Steganographer {
         // For each line in the stego object
         for (int i = 0; i < stegoObject.numLines(); i++) {
             // Get the coordinates of line i
-            String[] oldVertex = stegoObject.getCoordinates(i);
+            String[] oldVertex = stegoObject.getCoordinates(i, Object3D.VERTEX_3D_REGEX);
             String[] newVertex = new String[oldVertex.length];
 
             // Duplicate and modify each coordinate of oldVertex to create newVertex
@@ -67,7 +67,7 @@ public class Steganographer {
         // String together the least significant digit of every vertex
         for (int i = 0; i < stegoObject.numLines(); i++) {
             // Length of vertex array will be 0 if the line is not a vertex
-            String[] vertex = stegoObject.getCoordinates(i);
+            String[] vertex = stegoObject.getCoordinates(i, Object3D.VERTEX_3D_REGEX);
 
             // Concatenate the least significant digit of each coordinate in the vertex
             for (String coordinate : vertex) {
