@@ -26,6 +26,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Scanner;
 
 public class Steganography3DJavaFXApp extends Application {
     // Background of app
@@ -182,6 +183,31 @@ public class Steganography3DJavaFXApp extends Application {
         Label messageLabel = new Label("Message: ", messageField);
         messageLabel.setContentDisplay(ContentDisplay.BOTTOM);
         inputPane.getChildren().add(messageLabel);
+
+        // Load message button
+        Button loadButton = new Button("Load message");
+        FileChooser loadFileChooser = new FileChooser();
+        loadFileChooser.setTitle("Load message");
+        loadFileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
+        loadFileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Text", "*.txt"));
+
+        // Prompt the user to select a text file, then write the message to that file
+        loadButton.setOnAction(actionEvent -> {
+            File loadFile = loadFileChooser.showOpenDialog(stage);
+            try (Scanner messageScanner = new Scanner(loadFile)) {
+                messageField.setText(messageField.getText() + messageScanner.nextLine());
+                while (messageScanner.hasNextLine()) {
+                    messageField.setText(messageField.getText() + "\n" + messageScanner.nextLine());
+                }
+            }
+            catch (FileNotFoundException e) {
+                showNotification(e.getMessage(), "File not found", true);
+            }
+            catch (NullPointerException e) {
+                showNotification("No file selected, so message was not loaded.", "Not loaded", true);
+            }
+        });
+        inputPane.getChildren().add(loadButton);
 
         // Key field
         TextArea keyField = new TextArea();
