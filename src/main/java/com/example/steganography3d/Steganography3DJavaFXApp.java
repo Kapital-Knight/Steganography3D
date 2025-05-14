@@ -44,6 +44,7 @@ public class Steganography3DJavaFXApp extends Application {
         stage.setTitle("Steganography 3D");
         stage.setScene(s_menuScene);
 
+        stage.setOnCloseRequest(e -> System.exit(0));
         stage.show();
     }
 
