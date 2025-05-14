@@ -15,14 +15,17 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 import javax.swing.*;
 import java.awt.Toolkit;
 import java.awt.Dimension;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintWriter;
 
 public class Steganography3DJavaFXApp extends Application {
     // Background of app
@@ -130,6 +133,28 @@ public class Steganography3DJavaFXApp extends Application {
         Label messageLabel = new Label("Message:", messageScrollPane);
         messageLabel.setContentDisplay(ContentDisplay.BOTTOM);
         vBox.getChildren().add(messageLabel);
+
+        // Save message button
+        Button saveButton = new Button("Save message");
+        FileChooser saveFileChooser = new FileChooser();
+        saveFileChooser.setTitle("Save message");
+        saveFileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
+        saveFileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Text", "*.txt"));
+
+        // Prompt the user to select a text file, then write the message to that file
+        saveButton.setOnAction(actionEvent -> {
+            File saveFile = saveFileChooser.showSaveDialog(stage);
+            try (PrintWriter printWriter = new PrintWriter(saveFile)) {
+                printWriter.print(messageText.getText());
+            }
+            catch (FileNotFoundException e) {
+                showNotification(e.getMessage(), "File not found", true);
+            }
+            catch (NullPointerException e) {
+                showNotification("No file selected, so message was not saved.", "Not saved", true);
+            }
+        });
+        vBox.getChildren().add(saveButton);
     }
 
     // creates hiding menu and stores it in s_hideMessageScene
