@@ -10,10 +10,15 @@ import javafx.application.Application;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.geometry.Insets;
+import javafx.scene.Group;
+import javafx.scene.PerspectiveCamera;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.PhongMaterial;
+import javafx.scene.shape.MeshView;
+import javafx.scene.shape.TriangleMesh;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -180,7 +185,8 @@ public class Steganography3DJavaFXApp extends Application {
                 Object3D stegoObject = Steganographer.hideMessageInObject(messageField.textProperty().getValue(), coverObject, keyField.getText());
                 OBJWriter objWriter = new OBJWriter(stegoSelectionField.pathProperty().getValue());
                 objWriter.writeObject3D(stegoObject);
-                showNotification("Successfully saved to " + objWriter.getFilePath());
+                previewObject3D(stegoObject);
+//                showNotification("Successfully saved to " + objWriter.getFilePath());
             }
             catch (FileNotFoundException exception) {
                 showNotification(exception.getMessage(), "File not found");
@@ -221,5 +227,44 @@ public class Steganography3DJavaFXApp extends Application {
         });
 
         return button;
+    }
+
+    private static void previewObject3D (Object3D obj) {
+//        TriangleMesh mesh = obj.toTriangleMesh();
+        TriangleMesh mesh = new TriangleMesh();
+
+        // Define points (x, y, z)
+        mesh.getPoints().addAll(
+                0, 0, 0,    // Point 0: Base center
+                -50, 0, -50, // Point 1: Base corner 1
+                50, 0, -50,  // Point 2: Base corner 2
+                50, 0, 50,   // Point 3: Base corner 3
+                -50, 0, 50,  // Point 4: Base corner 4
+                0, 100, 0    // Point 5: Pyramid apex
+        );
+
+        // Define texture coordinates (u, v)
+        mesh.getTexCoords().addAll(0, 0); // Dummy texture coordinates
+
+        // Define faces (point indices and texture indices)
+        mesh.getFaces().addAll(
+                0, 0, 1, 0, 5, 0,  // Base center to corner 1 to apex
+                1, 0, 2, 0, 5, 0,  // Corner 1 to corner 2 to apex
+                2, 0, 3, 0, 5, 0,  // Corner 2 to corner 3 to apex
+                3, 0, 4, 0, 5, 0,  // Corner 3 to corner 4 to apex
+                4, 0, 0, 0, 5, 0   // Corner 4 to base center to apex
+        );
+        MeshView meshView = new MeshView(mesh);
+        meshView.setMaterial(new PhongMaterial(Color.LIGHTGRAY));
+
+        Group root = new Group(meshView);
+        Scene scene = new Scene(root);
+        scene.setFill(Color.DARKGRAY);
+        scene.setCamera(new PerspectiveCamera());
+//        scene.getCamera().setTranslateZ(10);
+
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        stage.show();
     }
 }

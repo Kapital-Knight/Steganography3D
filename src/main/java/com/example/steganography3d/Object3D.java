@@ -151,8 +151,7 @@ public class Object3D implements Cloneable {
             }
         }
 
-
-        for
+        return mesh;
     }
     
     @Override
@@ -203,10 +202,26 @@ public class Object3D implements Cloneable {
         }
 
         int numTriangles = points.length - 2;
-        int[] faces = new int[numTriangles * 9];
-        for (int i = 0; i < numTriangles; i++) {
-            // Add a single triangle using three indices from each
+        if (numTriangles == 1) {
+            return new int[] {
+                    vertexIndices[0], textureIndices[0], normalIndices[0],
+                    vertexIndices[1], textureIndices[1], normalIndices[1],
+                    vertexIndices[2], textureIndices[2], normalIndices[2]
+            };
+        }
+        else if (numTriangles == 2) {
+            return new int[] {
+                    vertexIndices[0], textureIndices[0], normalIndices[0],
+                    vertexIndices[1], textureIndices[1], normalIndices[1],
+                    vertexIndices[3], textureIndices[3], normalIndices[3],
 
+                    vertexIndices[1], textureIndices[1], normalIndices[1],
+                    vertexIndices[2], textureIndices[2], normalIndices[2],
+                    vertexIndices[3], textureIndices[3], normalIndices[3]
+            };
+        }
+        else {
+            return new int[0];
         }
     }
 }
