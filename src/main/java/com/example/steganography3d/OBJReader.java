@@ -37,10 +37,24 @@ public class OBJReader {
     // Stores .obj data from file into object3D so it doesn't have to be processed everytime getObject3D is called
     private void extractData () throws FileNotFoundException {
         Scanner fileScanner = new Scanner(file);
-        ArrayList<String> fileContents = new ArrayList<>();
-        while (fileScanner.hasNextLine()) {
-            fileContents.add( fileScanner.nextLine() );
-        }
+        ArrayList<String> fileContents = fileToArrayList(fileScanner, new ArrayList<>());
         object3D = new Object3D(fileContents);
+    }
+
+    // Converts a text file into an ArrayList<String> by recursion
+    private static ArrayList<String> fileToArrayList (Scanner fileScanner, ArrayList<String> result) {
+        // Base case: There are no more lines in the scanner
+        if (!fileScanner.hasNextLine()) {
+            // Return the result, there is nothing to add
+            return result;
+        }
+        // There are more lines
+        else {
+            // Add the next line to the result
+            result.add(fileScanner.nextLine());
+            // Recursive call
+            return fileToArrayList(fileScanner, result);
+        }
+
     }
 }
