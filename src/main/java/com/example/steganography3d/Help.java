@@ -1,3 +1,9 @@
+/**
+ @author Matthew Allgaier
+ @since 5/17/2025
+ Help.java
+ Describes purpose of app Steganography 3D
+ */
 package com.example.steganography3d;
 
 import javax.swing.*;

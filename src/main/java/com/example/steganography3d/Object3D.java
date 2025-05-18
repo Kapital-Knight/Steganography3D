@@ -1,6 +1,6 @@
 /**
  @author Matthew Allgaier
- @since 4/17/2025
+ @since 5/17/2025
  Object3D.java
  Used to store the information of a 3D object in .obj format.
  Each line of information is stored as a String.

@@ -1,6 +1,6 @@
 /**
  @author Matthew Allgaier
- @since 4/21/2025
+ @since 5/17/2025
  Steganography3DJavaFXApp.java
  Provides a GUI to use Steganography 3D and the Steganographer class.
  */
@@ -252,17 +252,19 @@ public class Steganography3DJavaFXApp extends Application {
     private static void showNotification(String message, String subtitle, boolean isError) {
         Pane mainPane = new VBox();
 
+        // Starts with red "ERROR" if notifying user of an error
         if (isError) {
             Text errorText = new Text("ERROR");
             errorText.setStroke(Color.DARKRED);
             mainPane.getChildren().add(errorText);
         }
 
+        // Add notification message to scene
         Text notificationText = new Text(message);
         mainPane.getChildren().add(notificationText);
-
         Scene notificationScene = new Scene(mainPane);
 
+        // Format and show stage
         Stage notificationStage = new Stage(StageStyle.UTILITY);
         notificationStage.setTitle("Steganography 3D | " + subtitle);
         notificationStage.setScene(notificationScene);
